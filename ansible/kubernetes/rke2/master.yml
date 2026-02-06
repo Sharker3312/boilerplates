@@ -1,0 +1,94 @@
+- name: Instalación RKE2 Master desde Cero - RHEL 9
+  hosts: masters
+  become: yes
+  vars:
+    rke2_version: "v1.31.8+rke2r1"
+    rke2_token: "SecretToken2026!" # Token para que los nodos se unan
+    master_ip: "{{ ansible_default_ipv4.address }}"
+
+  tasks:
+    - name: 1. Preparación del Sistema (Swap y Módulos)
+      block:
+        - name: Desactivar Swap inmediatamente
+          command: swapoff -a
+          when: ansible_swaptotal_mb > 0
+
+        - name: Eliminar Swap de /etc/fstab
+          replace:
+            path: /etc/fstab
+            regexp: '^([^#].*?\sswap\s+.*)$'
+            replace: '# \1'
+
+        - name: Cargar módulos del Kernel necesarios
+          copy:
+            dest: /etc/modules-load.d/rke2.conf
+            content: |
+              overlay
+              br_netfilter
+
+        - name: Aplicar módulos inmediatamente
+          modprobe:
+            name: "{{ item }}"
+          loop: [overlay, br_netfilter]
+
+    - name: 2. Configuración de Parámetros del Kernel (Sysctl)
+      copy:
+        dest: /etc/sysctl.d/99-rke2.conf
+        content: |
+          net.bridge.bridge-nf-call-iptables = 1
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.ipv4.ip_forward = 1
+      notify: Reload Sysctl
+
+    - name: 3. Configurar NetworkManager para ignorar interfaces CNI
+      copy:
+        dest: /etc/NetworkManager/conf.d/rke2-canal.conf
+        content: |
+          [keyfile]
+          unmanaged-devices=interface-name:flannel*;interface-name:cali*;interface-name:tunl*;interface-name:vxlan.calico;interface-name:wireguard.cali
+      notify: Reload NetworkManager
+
+    - name: 4. Instalar Dependencias y RKE2
+      block:
+        - name: Desactivar Firewalld (Evitar conflictos CNI)
+          systemd:
+            name: firewalld
+            state: stopped
+            enabled: no
+
+        - name: Descargar e instalar RKE2 via Script Oficial
+          shell: |
+            curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION={{ rke2_version }} INSTALL_RKE2_TYPE="server" sh -
+          args:
+            creates: /usr/local/bin/rke2
+
+    - name: 5. Configurar RKE2 Server
+      block:
+        - name: Crear directorio de configuración
+          file:
+            path: /etc/rancher/rke2
+            state: directory
+            mode: '0755'
+
+        - name: Generar config.yaml
+          copy:
+            dest: /etc/rancher/rke2/config.yaml
+            content: |
+              token: {{ rke2_token }}
+              tls-san:
+                - {{ master_ip }}
+              write-kubeconfig-mode: "0644"
+
+    - name: 6. Iniciar Servicio RKE2 Master
+      systemd:
+        name: rke2-server
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Reload Sysctl
+      command: sysctl --system
+    - name: Reload NetworkManager
+      systemd:
+        name: NetworkManager
+        state: reloaded
