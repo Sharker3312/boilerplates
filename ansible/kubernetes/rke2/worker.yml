@@ -1,10 +1,10 @@
-- name: Instalación RKE2 Master desde Cero - RHEL 9
-  hosts: masters
+- name: Instalación RKE2 Worker desde Cero - RHEL 9
+  hosts: workers
   become: yes
   vars:
     rke2_version: "v1.31.8+rke2r1"
     rke2_token: "SecretToken2026!" # Cambiar por ansible-vault en producción
-    master_ip: "{{ ansible_default_ipv4.address }}"
+    master_ip: "192.168.1.10" # IP real de tu servidor master
 
   tasks:
     - name: 1. Preparación del Sistema (Swap y Módulos)
@@ -64,7 +64,7 @@
           when: ansible_distribution_major_version == "9"
           ignore_errors: yes
 
-    - name: 5. Instalar Dependencias y RKE2
+    - name: 5. Instalar Dependencias y RKE2 Agent
       block:
         - name: Desactivar Firewalld (Evitar conflictos CNI)
           systemd:
@@ -81,13 +81,13 @@
               - iscsi-initiator-utils
             state: present
 
-        - name: Descargar e instalar RKE2 via Script Oficial
+        - name: Descargar e instalar RKE2 Agent via Script Oficial
           shell: |
-            curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION={{ rke2_version }} INSTALL_RKE2_TYPE="server" sh -
+            curl -sfL https://get.rke2.io | INSTALL_RKE2_VERSION={{ rke2_version }} INSTALL_RKE2_TYPE="agent" sh -
           args:
             creates: /usr/local/bin/rke2
 
-    - name: 6. Configurar RKE2 Server
+    - name: 6. Configurar RKE2 Agent
       block:
         - name: Crear directorio de configuración
           file:
@@ -95,21 +95,17 @@
             state: directory
             mode: '0750'
 
-        - name: Generar config.yaml
+        - name: Generar config.yaml para el Agente
           copy:
             dest: /etc/rancher/rke2/config.yaml
             mode: '0640'
             content: |
+              server: "https://{{ master_ip }}:9345"
               token: "{{ rke2_token }}"
-              tls-san:
-                - "{{ master_ip }}"
-              write-kubeconfig-mode: "0644"
-              etcd-snapshot-schedule-cron: "0 */6 * * *"
-              etcd-snapshot-retention: 5
 
-    - name: 7. Iniciar Servicio RKE2 Master
+    - name: 7. Iniciar Servicio RKE2 Agent
       systemd:
-        name: rke2-server
+        name: rke2-agent
         state: started
         enabled: yes
 
@@ -119,18 +115,6 @@
         mode: '0644'
         content: |
           export PATH=$PATH:/var/lib/rancher/rke2/bin
-          export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
-
-    - name: 9. Esperar a que el nodo Master esté Ready
-      shell: |
-        export PATH=$PATH:/var/lib/rancher/rke2/bin
-        export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
-        kubectl get nodes | grep -w Ready
-      register: node_ready
-      retries: 30
-      delay: 10
-      until: node_ready.rc == 0
-      changed_when: false
 
   handlers:
     - name: Reload Sysctl
