@@ -4,7 +4,7 @@ services:
     container_name: prometheus
     restart: unless-stopped
     command:
-      - --config.file=/etc/prometheus/prometheus.yml
+      - --config.file=/etc/prometheus/config/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=30d
       - --web.enable-lifecycle
@@ -12,8 +12,8 @@ services:
       - "9090:9090"
     volumes:
       - type: bind
-        source: ./prometheus/config/prometheus.yml
-        target: /etc/prometheus/prometheus.yml
+        source: ./prometheus
+        target: /etc/prometheus
         read_only: true
       - prometheus_data:/prometheus
     networks:
@@ -23,13 +23,13 @@ services:
     image: grafana/loki:3.1.0
     container_name: loki
     restart: unless-stopped
-    command: -config.file=/etc/loki/config.yml
+    command: -config.file=/etc/loki/config/config.yml
     ports:
       - "3100:3100"
     volumes:
       - type: bind
-        source: ./loki/config/config.yml
-        target: /etc/loki/config.yml
+        source: ./loki
+        target: /etc/loki
         read_only: true
       - loki_data:/loki
     networks:
