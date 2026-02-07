@@ -1,0 +1,9 @@
+---
+# Variables para Fail2ban (SSH)
+fail2ban_ssh_port: 22
+fail2ban_ignoreip: ""
+fail2ban_bantime: -1
+fail2ban_findtime: 600
+fail2ban_maxretry: 3
+fail2ban_dbfile: /var/lib/fail2ban/fail2ban.sqlite3
+fail2ban_dbpurgeage: 1d

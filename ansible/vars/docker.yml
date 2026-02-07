@@ -1,0 +1,3 @@
+---
+# Variables para Docker
+ansible_docker_user: "{{ ansible_user }}"

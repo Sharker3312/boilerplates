@@ -1,0 +1,13 @@
+---
+# Configuración de Prometheus
+prometheus_version: "2.53.1"
+prometheus_port: 9090
+prometheus_data_dir: /var/lib/prometheus
+prometheus_config_dir: /etc/prometheus
+prometheus_user: prometheus
+prometheus_group: prometheus
+prometheus_scrape_interval: 15s
+prometheus_scrape_timeout: 10s
+prometheus_node_exporter_port: 9100
+prometheus_endpoint: "http://prometheus.example.com:9090"
+prometheus_additional_scrape_configs: []

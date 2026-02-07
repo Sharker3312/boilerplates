@@ -1,0 +1,3 @@
+---
+# Reemplaza el valor con tu clave pública real
+ssh_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEXAMPLEKEYREPLACE user@example"

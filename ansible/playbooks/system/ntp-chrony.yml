@@ -1,0 +1,61 @@
+---
+- name: Install and configure Chrony (NTP)
+  hosts: all
+  become: yes
+  vars_files:
+    - ../../vars/chrony.yml
+
+  tasks:
+    - name: Set system timezone
+      ansible.builtin.command:
+        cmd: "timedatectl set-timezone {{ timezone }}"
+      when: ansible_service_mgr == "systemd"
+      register: set_timezone
+      changed_when: false
+
+    - name: Install chrony
+      ansible.builtin.package:
+        name: chrony
+        state: present
+
+    - name: Configure chrony on Debian/Ubuntu
+      ansible.builtin.copy:
+        dest: "{{ chrony_conf_path_debian }}"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          pool {{ chrony_pool | join(' ') }} iburst
+          driftfile /var/lib/chrony/drift
+          makestep 1.0 3
+          rtcsync
+          logdir /var/log/chrony
+      when: ansible_os_family == "Debian"
+      notify: Restart chrony
+
+    - name: Configure chrony on RedHat/CentOS
+      ansible.builtin.copy:
+        dest: "{{ chrony_conf_path_redhat }}"
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          pool {{ chrony_pool | join(' ') }} iburst
+          driftfile /var/lib/chrony/drift
+          makestep 1.0 3
+          rtcsync
+          logdir /var/log/chrony
+      when: ansible_os_family == "RedHat"
+      notify: Restart chrony
+
+    - name: Ensure chrony service is enabled and started
+      ansible.builtin.service:
+        name: chrony
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart chrony
+      ansible.builtin.service:
+        name: chrony
+        state: restarted

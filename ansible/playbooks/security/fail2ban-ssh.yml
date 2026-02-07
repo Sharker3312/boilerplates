@@ -1,0 +1,57 @@
+---
+- name: Install and configure Fail2ban for SSH
+  hosts: all
+  become: yes
+  vars_files:
+    - ../../vars/fail2ban.yml
+
+  tasks:
+    - name: Install fail2ban
+      ansible.builtin.package:
+        name: fail2ban
+        state: present
+
+    - name: Ensure fail2ban service is enabled and started
+      ansible.builtin.service:
+        name: fail2ban
+        state: started
+        enabled: yes
+
+    - name: Configure SSH jail
+      ansible.builtin.copy:
+        dest: /etc/fail2ban/jail.d/ssh.local
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [sshd]
+          enabled = true
+          port = {{ fail2ban_ssh_port }}
+          logpath = %(sshd_log)s
+          backend = %(sshd_backend)s
+          ignoreip = {{ fail2ban_ignoreip }}
+          bantime = {{ fail2ban_bantime }}
+          findtime = {{ fail2ban_findtime }}
+          maxretry = {{ fail2ban_maxretry }}
+          bantime.increment = true
+          bantime.factor = 2
+          bantime.overalljails = true
+      notify: Restart fail2ban
+
+    - name: Enable persistent ban database
+      ansible.builtin.copy:
+        dest: /etc/fail2ban/fail2ban.local
+        owner: root
+        group: root
+        mode: '0644'
+        content: |
+          [Definition]
+          dbfile = {{ fail2ban_dbfile }}
+          dbpurgeage = {{ fail2ban_dbpurgeage }}
+      notify: Restart fail2ban
+
+  handlers:
+    - name: Restart fail2ban
+      ansible.builtin.service:
+        name: fail2ban
+        state: restarted

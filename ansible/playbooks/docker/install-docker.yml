@@ -1,0 +1,95 @@
+---
+- name: Install Docker and Docker Compose
+  hosts: all
+  become: yes
+  vars_files:
+    - ../../vars/docker.yml
+  
+  tasks:
+    - name: Ensure dependencies are installed
+      ansible.builtin.package:
+        name:
+          - bc
+          - curl
+          - expect
+          - git
+          - ca-certificates
+          - apt-transport-https
+          - software-properties-common
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure dependencies are installed (RedHat)
+      ansible.builtin.package:
+        name:
+          - bc
+          - curl
+          - expect
+          - git
+          - ca-certificates
+          - yum-utils
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: Check if Docker is already installed
+      ansible.builtin.command:
+        cmd: docker --version
+      register: docker_installed
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Install Docker using official convenience script
+      ansible.builtin.shell: |
+        curl -fsSL https://get.docker.com -o /tmp/get-docker.sh
+        sh /tmp/get-docker.sh
+        rm /tmp/get-docker.sh
+      args:
+        executable: /bin/bash
+      when: docker_installed.rc != 0
+
+    - name: Ensure Docker service is enabled and started
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add user to docker group
+      ansible.builtin.user:
+        name: "{{ ansible_docker_user }}"
+        groups: docker
+        append: yes
+
+    - name: Reset connection to apply group changes
+      ansible.builtin.meta: reset_connection
+
+    - name: Verify Docker is working
+      ansible.builtin.command:
+        cmd: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Display Docker version
+      ansible.builtin.debug:
+        msg: "Docker instalado: {{ docker_version.stdout }}"
+
+    - name: Verify Docker Compose is installed
+      ansible.builtin.command:
+        cmd: docker compose version
+      register: compose_version
+      changed_when: false
+
+    - name: Display Docker Compose version
+      ansible.builtin.debug:
+        msg: "Docker Compose instalado: {{ compose_version.stdout }}"
+
+    - name: Test Docker with hello-world
+      ansible.builtin.command:
+        cmd: docker run --rm hello-world
+      register: docker_test
+      changed_when: false
+      ignore_errors: yes
+
+    - name: Display Docker test result
+      ansible.builtin.debug:
+        msg: "Docker está funcionando correctamente"
+      when: docker_test.rc == 0
