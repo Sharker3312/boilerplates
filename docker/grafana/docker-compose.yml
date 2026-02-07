@@ -12,8 +12,8 @@ services:
       - "9090:9090"
     volumes:
       - type: bind
-        source: ./prometheus
-        target: /etc/prometheus
+        source: ./prometheus/config/prometheus.yml
+        target: /etc/prometheus/prometheus.yml
         read_only: true
       - prometheus_data:/prometheus
     networks:
@@ -28,8 +28,8 @@ services:
       - "3100:3100"
     volumes:
       - type: bind
-        source: ./loki
-        target: /etc/loki
+        source: ./loki/config/config.yml
+        target: /etc/loki/config.yml
         read_only: true
       - loki_data:/loki
     networks:
