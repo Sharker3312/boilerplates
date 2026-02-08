@@ -57,6 +57,13 @@ scrape_configs:
       - targets: ["loki:3100"]
 
   # ---------------------------------------------------------------------------
+  # Grafana Alloy (OTLP) metrics
+  # ---------------------------------------------------------------------------
+  - job_name: "alloy"
+    static_configs:
+      - targets: ["alloy:8889"]
+
+  # ---------------------------------------------------------------------------
   # Node Exporter — host-level metrics (CPU, RAM, disk, network)
   # Uncomment and set the target IPs/hostnames where node_exporter runs.
   # See: ansible/playbooks/monitoring/node-exporter.yml to deploy it.
