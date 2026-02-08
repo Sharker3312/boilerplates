@@ -23,10 +23,18 @@ otelcol.exporter.loki "default" {
   forward_to = [loki.write.default.receiver]
 }
 
+otelcol.exporter.prometheus "default" {
+  forward_to = [prometheus.write.default.receiver]
+}
+
+prometheus.write "default" {
+  endpoint {
+    url = "http://prometheus:9090/api/v1/write"
+  }
+}
+
 loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"
   }
 }
-
-otelcol.exporter.prometheus "default" {}
