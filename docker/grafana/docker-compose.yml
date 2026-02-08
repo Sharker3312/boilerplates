@@ -8,6 +8,7 @@ services:
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=30d
       - --web.enable-lifecycle
+      - --web.enable-remote-write-receiver
     ports:
       - "9090:9090"
     volumes:
@@ -41,7 +42,6 @@ services:
     ports:
       - "4317:4317"
       - "4318:4318"
-      - "8889:8889"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
     networks:
@@ -73,6 +73,8 @@ services:
       GF_USERS_ALLOW_SIGN_UP: "false"
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
     depends_on:
       - prometheus
       - loki

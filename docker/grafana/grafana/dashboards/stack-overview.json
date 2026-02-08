@@ -1,0 +1,21 @@
+{
+  "uid": "stack-overview",
+  "title": "Stack Overview",
+  "tags": ["observability"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "Welcome",
+      "gridPos": {"x": 0, "y": 0, "w": 24, "h": 6},
+      "options": {
+        "content": "This folder is provisioned from Git. Add JSON dashboards here.",
+        "mode": "markdown"
+      }
+    }
+  ]
+}
