@@ -11,7 +11,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus:/etc/prometheus:ro
       - prometheus_data:/prometheus
     networks:
       - monitoring
@@ -26,7 +26,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./loki/config.yml:/etc/loki/config.yml:ro
+      - ./loki:/etc/loki:ro
       - loki_data:/loki
     networks:
       - monitoring
