@@ -4,17 +4,14 @@ services:
     container_name: prometheus
     restart: unless-stopped
     command:
-      - --config.file=/etc/prometheus/prometheus.yaml
+      - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
       - --storage.tsdb.retention.time=30d
       - --web.enable-lifecycle
     ports:
       - "9090:9090"
     volumes:
-      - type: bind
-        source: ./prometheus/config/prometheus.yaml
-        target: /etc/prometheus/prometheus.yaml
-        read_only: true
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     networks:
       - monitoring
@@ -29,10 +26,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - type: bind
-        source: ./loki/config/config.yml
-        target: /etc/loki/config.yml
-        read_only: true
+      - ./loki/config.yml:/etc/loki/config.yml:ro
       - loki_data:/loki
     networks:
       - monitoring
