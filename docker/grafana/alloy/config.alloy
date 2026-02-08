@@ -13,6 +13,23 @@ otelcol.receiver.otlp "default" {
   }
 }
 
+otelcol.receiver.awscloudwatch "lambda_logs" {
+  region = "us-east-1"
+
+  logs {
+    poll_interval = "1m"
+    groups {
+      named {
+        group_name = "/aws/lambda/lambda_python_test"
+      }
+    }
+  }
+
+  output {
+    logs = [otelcol.processor.batch.default.input]
+  }
+}
+
 otelcol.processor.batch "default" {
   output {
     logs    = [otelcol.exporter.loki.default.input]

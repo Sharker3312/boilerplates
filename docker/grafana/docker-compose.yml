@@ -38,12 +38,17 @@ services:
     restart: unless-stopped
     command:
       - run
+      - --stability.level=experimental
       - /etc/alloy/config.alloy
     ports:
       - "4318:4318"
       - "4317:4317"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: us-east-1
     networks:
       - monitoring
 
