@@ -42,22 +42,9 @@ services:
     ports:
       - "4317:4317"
       - "4318:4318"
+      - "8889:8889"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
-    networks:
-      - monitoring
-
-  tempo:
-    image: grafana/tempo:2.5.0
-    container_name: tempo
-    restart: unless-stopped
-    command:
-      - -config.file=/etc/tempo/tempo.yml
-    ports:
-      - "3200:3200"
-    volumes:
-      - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro
-      - tempo_data:/var/tempo
     networks:
       - monitoring
 
@@ -78,14 +65,12 @@ services:
     depends_on:
       - prometheus
       - loki
-      - tempo
     networks:
       - monitoring
 
 volumes:
   prometheus_data:
   loki_data:
-  tempo_data:
   grafana_data:
 
 networks:
