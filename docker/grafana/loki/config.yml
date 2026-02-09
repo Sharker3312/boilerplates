@@ -74,8 +74,8 @@ limits_config:
   ingestion_burst_size_mb: 20      # Per-tenant burst size (MB)
   max_entries_limit_per_query: 5000
   max_query_series: 500
-  reject_old_samples: true
-  reject_old_samples_max_age: 168h # 7 days — reject logs older than this
+  reject_old_samples: false
+  reject_old_samples_max_age: 720h # 30 days — ignored when reject_old_samples is false
 
 # =============================================================================
 # Query settings
