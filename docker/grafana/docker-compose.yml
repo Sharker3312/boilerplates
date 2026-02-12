@@ -14,8 +14,7 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
-    networks:
-      - monitoring
+    # ...existing code...
 
   loki:
     image: grafana/loki:3.1.0
@@ -29,8 +28,7 @@ services:
     volumes:
       - ./loki/config.yml:/etc/loki/config.yml:ro
       - loki_data:/loki
-    networks:
-      - monitoring
+    # ...existing code...
 
   alloy:
     image: grafana/alloy:latest
@@ -49,8 +47,7 @@ services:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: us-east-1
-    networks:
-      - monitoring
+    # ...existing code...
 
   tempo:
     image: grafana/tempo:2.5.0
@@ -63,8 +60,7 @@ services:
     volumes:
       - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro
       - tempo_data:/var/tempo
-    networks:
-      - monitoring
+    # ...existing code...
 
   grafana:
     image: grafana/grafana:11.2.0
@@ -84,15 +80,11 @@ services:
       - prometheus
       - loki
       - tempo
-    networks:
-      - monitoring
+    # ...existing code...
 
 volumes:
   prometheus_data:
   loki_data:
   tempo_data:
   grafana_data:
-
-networks:
-  monitoring:
-    driver: bridge
+  # ...existing code...
