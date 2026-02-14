@@ -1,0 +1,38 @@
+web:
+  port: 8080
+
+storage:
+  type: sqlite
+  path: /data/data.db
+
+endpoints:
+  - name: ERP Dermagroup
+    group: Deepzide
+    url: "https://erp-dermagroup.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+  - name: API Health
+    group: Deepzide
+    url: "https://p4d8jtoinl.execute-api.us-east-1.amazonaws.com/health"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+  - name: Alloy
+    group: observabilty
+    url: "https://alloy.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+  - name: Loki
+    group: observabilty
+    url: "https://loki.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+  - name: Grafana
+    group: observabilty
+    url: "https://grafana.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
