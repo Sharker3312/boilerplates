@@ -12,6 +12,18 @@ endpoints:
     interval: 1m
     conditions:
       - "[STATUS] < 500"
+  - name: Cheese - Prod
+    group: ERP
+    url: "https://erp-cheese.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
+  - name: Acuamania - Prod
+    group: ERP
+    url: "https://erp-acuamania.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
   - name: TM - API
     group: Todomercado
     url: "https://p4d8jtoinl.execute-api.us-east-1.amazonaws.com/health"
