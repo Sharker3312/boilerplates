@@ -12,6 +12,12 @@ endpoints:
     interval: 1m
     conditions:
       - "[STATUS] < 500"
+  - name: Dermagroup - Dev
+    group: ERP
+    url: "https://erp-dermagroup.deepzide-dev.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] < 500"
   - name: Cheese - Prod
     group: ERP
     url: "https://erp-cheese.deepzide.com"
