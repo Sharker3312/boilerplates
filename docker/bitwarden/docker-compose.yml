@@ -1,0 +1,17 @@
+services:
+  bitwarden:
+    image: ghcr.io/bitwarden/lite:latest
+    restart: unless-stopped
+    expose:
+      - "8080"
+    environment:
+      BW_DOMAIN: ${BW_DOMAIN:-https://bitwarden.example.com}
+      BW_DB_PROVIDER: ${BW_DB_PROVIDER:-sqlite}
+      BW_DB_FILE: ${BW_DB_FILE:-/etc/bitwarden/vault.db}
+      BW_INSTALLATION_ID: ${BW_INSTALLATION_ID:-}
+      BW_INSTALLATION_KEY: ${BW_INSTALLATION_KEY:-}
+    volumes:
+      - bitwarden_data:/etc/bitwarden
+
+volumes:
+  bitwarden_data:
