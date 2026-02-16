@@ -329,17 +329,172 @@
     },
     {
       "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 13
+      },
+      "id": 7,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "topk(8, sum by (cmd) (count_over_time({filename=\"$log_file\"} |= \"$contains\" | regexp \"cmd': '(?P<cmd>[^']+)'\" [$__range])))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Top Commands",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 13
+      },
+      "id": 8,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": false
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "topk(8, sum by (action) (count_over_time({filename=\"$log_file\"} |= \"$contains\" | regexp \"action': '(?P<action>[^']+)'\" [$__range])))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "Top Actions",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
         "default": false,
         "type": "loki",
         "uid": "loki"
       },
       "gridPos": {
-        "h": 14,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 21
       },
       "id": 5,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "editorMode": "code",
+          "expr": "{filename=\"$log_file\"} |= \"$contains\" | json | regexp \"action': '(?P<action>[^']+)'\" | regexp \"cmd': '(?P<cmd>[^']+)'\" | line_format \"action={{.action}}  cmd={{.cmd}}\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "title": "ERP Events (Parsed)",
+      "transparent": true,
+      "type": "logs"
+    },
+    {
+      "datasource": {
+        "default": false,
+        "type": "loki",
+        "uid": "loki"
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 31
+      },
+      "id": 6,
       "options": {
         "dedupStrategy": "none",
         "enableLogDetails": true,
@@ -362,7 +517,7 @@
           "refId": "A"
         }
       ],
-      "title": "Logs - DermaGroup Dev",
+      "title": "ERP Events (Raw)",
       "transparent": true,
       "type": "logs"
     }
@@ -439,6 +594,6 @@
   "timezone": "browser",
   "title": "DermaGroup Dev",
   "uid": "bfdg51clk4flsb",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
