@@ -1,3 +1,4 @@
+#EBP
 services:
   vaultwarden:
     image: vaultwarden/server:latest
