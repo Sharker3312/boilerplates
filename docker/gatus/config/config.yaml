@@ -15,7 +15,7 @@ endpoints:
       - "[STATUS] < 500"
   - name: Dermagroup - Dev
     group: ERP
-    url: "https://erp-dermagroup.deepzide-dev.com"
+    url: "https://erp-dermagroup-dev.deepzide.com"
     interval: 1m
     conditions:
       - "[STATUS] > 0"
