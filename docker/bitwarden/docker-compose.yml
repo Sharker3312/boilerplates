@@ -1,17 +1,17 @@
 services:
-  bitwarden:
-    image: ghcr.io/bitwarden/lite:latest
+  vaultwarden:
+    image: vaultwarden/server:latest
     restart: unless-stopped
     expose:
-      - "8080"
+      - "80"
     environment:
-      BW_DOMAIN: ${BW_DOMAIN:-https://bitwarden.example.com}
-      BW_DB_PROVIDER: ${BW_DB_PROVIDER:-sqlite}
-      BW_DB_FILE: ${BW_DB_FILE:-/etc/bitwarden/vault.db}
-      BW_INSTALLATION_ID: ${BW_INSTALLATION_ID:-}
-      BW_INSTALLATION_KEY: ${BW_INSTALLATION_KEY:-}
+      DOMAIN: ${DOMAIN:-https://vault.deepzide.com}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-change-this-admin-token}
+      SIGNUPS_ALLOWED: ${SIGNUPS_ALLOWED:-true}
+      WEBSOCKET_ENABLED: ${WEBSOCKET_ENABLED:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
     volumes:
-      - bitwarden_data:/etc/bitwarden
+      - vaultwarden_data:/data
 
 volumes:
-  bitwarden_data:
+  vaultwarden_data:
