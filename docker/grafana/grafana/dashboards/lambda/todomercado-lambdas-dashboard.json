@@ -23,6 +23,27 @@
   "liveNow": false,
   "panels": [
     {
+      "id": 9,
+      "type": "text",
+      "title": "Guía rápida del dashboard",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "### Qué significa cada visualización\\n- **Invocaciones por minuto**: cantidad de ejecuciones Lambda en el intervalo seleccionado.\\n- **Errores por minuto**: eventos con patrones de error (`ERROR`, `Exception`, `Traceback`, `Task timed out`, `Runtime exited`).\\n- **Error rate (%)**: relación entre errores e invocaciones.\\n- **Cold starts por minuto**: inicializaciones frías detectadas (`platform.initStart` / `INIT_START`).\\n- **Duration p50/p95/p99**: latencia de ejecución de la Lambda (ms), percentiles clave.\\n- **Max memory used (MB)**: pico de memoria usada por la Lambda.\\n- **Logs en tiempo real**: stream de logs crudos para troubleshooting en vivo.\\n- **Top mensajes de error**: agrupación de mensajes de error más frecuentes en la ventana seleccionada.\\n\\n### Cómo usar filtros\\n- Selecciona **stage** primero.\\n- Luego selecciona una o varias funciones en **Lambda**.\\n- Ajusta **Interval** para granularidad de métricas."
+      },
+      "transparent": true
+    },
+    {
       "id": 1,
       "type": "timeseries",
       "title": "Invocaciones por minuto",
@@ -35,7 +56,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 6
       },
       "fieldConfig": {
         "defaults": {
@@ -97,7 +118,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 6
       },
       "fieldConfig": {
         "defaults": {
@@ -159,7 +180,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 14
       },
       "fieldConfig": {
         "defaults": {
@@ -221,7 +242,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 14
       },
       "fieldConfig": {
         "defaults": {
@@ -283,7 +304,7 @@
         "h": 8,
         "w": 14,
         "x": 0,
-        "y": 16
+        "y": 22
       },
       "fieldConfig": {
         "defaults": {
@@ -369,7 +390,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 16
+        "y": 22
       },
       "fieldConfig": {
         "defaults": {
@@ -431,7 +452,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 42
       },
       "fieldConfig": {
         "defaults": {
@@ -493,7 +514,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 30
       },
       "options": {
         "dedupStrategy": "none",
@@ -639,5 +660,6 @@
   "title": "TodoMercado Lambdas - Overview",
   "uid": "tm-lambdas-overview",
   "version": 1,
-  "weekStart": ""
+  "weekStart": "",
+  "description": "Dashboard unificado de Lambdas de TodoMercado. Permite seleccionar stage y función para monitorear invocaciones, errores, error rate, cold starts, duración, memoria y logs en vivo."
 }

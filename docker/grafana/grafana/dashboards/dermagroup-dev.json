@@ -309,5 +309,6 @@
   "title": "DermaGroup Dev",
   "uid": "bfdg51clk4flsb",
   "version": 3,
-  "weekStart": ""
+  "weekStart": "",
+  "description": "Vista de logs de DermaGroup en ambiente dev. Sirve para explorar eventos, buscar patrones y detectar errores funcionales en tiempo real."
 }

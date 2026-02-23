@@ -1,7 +1,9 @@
 {
   "uid": "stack-overview",
   "title": "Stack Overview",
-  "tags": ["observability"],
+  "tags": [
+    "observability"
+  ],
   "timezone": "browser",
   "schemaVersion": 39,
   "version": 1,
@@ -11,11 +13,17 @@
       "id": 1,
       "type": "text",
       "title": "Welcome",
-      "gridPos": {"x": 0, "y": 0, "w": 24, "h": 6},
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 6
+      },
       "options": {
         "content": "This folder is provisioned from Git. Add JSON dashboards here.",
         "mode": "markdown"
       }
     }
-  ]
+  ],
+  "description": "Resumen general del stack de observabilidad. Muestra estado/telemetría de componentes principales para validación rápida de salud de plataforma."
 }

@@ -866,5 +866,6 @@
   "title": "HeyYou - Enhanced Logging Dashboard",
   "uid": "efbjvchjz5jb4c",
   "version": 4,
-  "weekStart": ""
+  "weekStart": "",
+  "description": "Dashboard de logging de HeyYou con enfoque en trazabilidad operativa: volumen de logs, warnings y detalle de eventos para troubleshooting."
 }
