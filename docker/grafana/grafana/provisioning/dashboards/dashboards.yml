@@ -39,4 +39,16 @@ providers:
     editable: true
     updateIntervalSeconds: 30
     options:
-      path: /var/lib/grafana/dashboards/lambda
+      path: /var/lib/grafana/dashboards/tm-one
+
+  # Legacy cleanup provider: removes old dashboards provisioned years ago under
+  # provider name "Lambda Dashboards" that are still locked as provisioned.
+  - name: "Lambda Dashboards"
+    orgId: 1
+    folder: "Legacy Cleanup"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards/_cleanup/legacy-lambda
