@@ -23,27 +23,6 @@
   "liveNow": false,
   "panels": [
     {
-      "id": 9,
-      "type": "text",
-      "title": "Guía rápida del dashboard",
-      "datasource": {
-        "type": "loki",
-        "uid": "${datasource}"
-      },
-      "pluginVersion": "11.2.0",
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 0
-      },
-      "options": {
-        "mode": "markdown",
-        "content": "### Qué significa cada visualización\\n- **Invocaciones por minuto**: cantidad de ejecuciones Lambda en el intervalo seleccionado.\\n- **Errores por minuto**: eventos con patrones de error (`ERROR`, `Exception`, `Traceback`, `Task timed out`, `Runtime exited`).\\n- **Error rate (%)**: relación entre errores e invocaciones.\\n- **Cold starts por minuto**: inicializaciones frías detectadas (`platform.initStart` / `INIT_START`).\\n- **Duration p50/p95/p99**: latencia de ejecución de la Lambda (ms), percentiles clave.\\n- **Max memory used (MB)**: pico de memoria usada por la Lambda.\\n- **Logs en tiempo real**: stream de logs crudos para troubleshooting en vivo.\\n- **Top mensajes de error**: agrupación de mensajes de error más frecuentes en la ventana seleccionada.\\n\\n### Cómo usar filtros\\n- Selecciona **stage** primero.\\n- Luego selecciona una o varias funciones en **Lambda**.\\n- Ajusta **Interval** para granularidad de métricas."
-      },
-      "transparent": true
-    },
-    {
       "id": 1,
       "type": "timeseries",
       "title": "Invocaciones por minuto",
@@ -56,7 +35,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 6
+        "y": 0
       },
       "fieldConfig": {
         "defaults": {
@@ -103,7 +82,8 @@
           "queryType": "range",
           "refId": "A"
         }
-      ]
+      ],
+      "description": "Cantidad de invocaciones Lambda por intervalo. Se calcula desde eventos platform.report o REPORT RequestId."
     },
     {
       "id": 2,
@@ -118,7 +98,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 0
       },
       "fieldConfig": {
         "defaults": {
@@ -165,7 +145,8 @@
           "queryType": "range",
           "refId": "A"
         }
-      ]
+      ],
+      "description": "Cantidad de errores por intervalo usando patrones: ERROR, Exception, Traceback, Task timed out, Runtime exited."
     },
     {
       "id": 3,
@@ -180,7 +161,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 14
+        "y": 8
       },
       "fieldConfig": {
         "defaults": {
@@ -227,7 +208,8 @@
           "queryType": "range",
           "refId": "A"
         }
-      ]
+      ],
+      "description": "Porcentaje de error: errores / invocaciones en el intervalo seleccionado."
     },
     {
       "id": 4,
@@ -242,7 +224,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 14
+        "y": 8
       },
       "fieldConfig": {
         "defaults": {
@@ -289,7 +271,8 @@
           "queryType": "range",
           "refId": "A"
         }
-      ]
+      ],
+      "description": "Cantidad de cold starts por intervalo, detectados por platform.initStart o INIT_START."
     },
     {
       "id": 5,
@@ -304,7 +287,7 @@
         "h": 8,
         "w": 14,
         "x": 0,
-        "y": 22
+        "y": 16
       },
       "fieldConfig": {
         "defaults": {
@@ -375,7 +358,8 @@
           "queryType": "range",
           "refId": "C"
         }
-      ]
+      ],
+      "description": "Latencia de ejecución en ms (p50/p95/p99) extraída de métricas de REPORT/platform.report."
     },
     {
       "id": 6,
@@ -390,7 +374,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 22
+        "y": 16
       },
       "fieldConfig": {
         "defaults": {
@@ -437,7 +421,8 @@
           "queryType": "range",
           "refId": "A"
         }
-      ]
+      ],
+      "description": "Máximo de memoria usada (MB) durante el intervalo, extraído de REPORT/platform.report."
     },
     {
       "id": 7,
@@ -452,7 +437,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 36
       },
       "fieldConfig": {
         "defaults": {
@@ -499,7 +484,8 @@
           "refId": "A",
           "instant": true
         }
-      ]
+      ],
+      "description": "Top de mensajes de error más frecuentes para identificar fallos recurrentes."
     },
     {
       "id": 8,
@@ -514,7 +500,7 @@
         "h": 12,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 24
       },
       "options": {
         "dedupStrategy": "none",
@@ -537,7 +523,8 @@
           "queryType": "range",
           "refId": "A"
         }
-      ]
+      ],
+      "description": "Stream de logs en tiempo real filtrado por stage y Lambda seleccionada(s)."
     }
   ],
   "refresh": "30s",
