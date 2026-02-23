@@ -426,8 +426,8 @@
     },
     {
       "id": 7,
-      "type": "table",
-      "title": "Top mensajes de error",
+      "type": "logs",
+      "title": "Errores (JSON crudo)",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -455,22 +455,14 @@
         "overrides": []
       },
       "options": {
-        "cellHeight": "sm",
-        "footer": {
-          "countRows": false,
-          "fields": "",
-          "reducer": [
-            "sum"
-          ],
-          "show": false
-        },
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Value"
-          }
-        ]
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
       },
       "targets": [
         {
@@ -479,13 +471,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by (error_message) (count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\", function=~\"${lambda_name:regex}\"} | json record=\"record\" | line_format \"{{.record}}\" | regexp \"(?P<error_message>(?i)(An error occurred \\\\([^\\\\)]+\\\\) when calling [^:]+: .*|Exception[^\\\\n]*|Traceback[^\\\\n]*|Task timed out[^\\\\n]*|Runtime exited[^\\\\n]*|\\\\[ERROR\\\\][^\\\\n]*))\" | error_message != \"\" [$__range])))",
-          "queryType": "instant",
-          "refId": "A",
-          "instant": true
+          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\"",
+          "queryType": "range",
+          "refId": "A"
         }
       ],
-      "description": "Top de errores agrupados por mensaje normalizado desde `record` (JSON), priorizando causas reales como ValidationException/Exception/Traceback/timeout."
+      "description": "Eventos de error en formato JSON crudo filtrados por stage y Lambda seleccionada(s)."
     },
     {
       "id": 8,
