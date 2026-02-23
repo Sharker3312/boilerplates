@@ -33,7 +33,7 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 6,
+        "w": 12,
         "x": 0,
         "y": 0
       },
@@ -95,8 +95,8 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 6,
+        "w": 12,
+        "x": 12,
         "y": 0
       },
       "fieldConfig": {
@@ -157,9 +157,9 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 12,
-        "y": 0
+        "w": 12,
+        "x": 0,
+        "y": 8
       },
       "fieldConfig": {
         "defaults": {
@@ -219,9 +219,9 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 18,
-        "y": 0
+        "w": 12,
+        "x": 12,
+        "y": 8
       },
       "fieldConfig": {
         "defaults": {
@@ -283,7 +283,7 @@
         "h": 8,
         "w": 14,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "fieldConfig": {
         "defaults": {
@@ -369,7 +369,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 8
+        "y": 16
       },
       "fieldConfig": {
         "defaults": {
@@ -428,10 +428,10 @@
       },
       "pluginVersion": "11.2.0",
       "gridPos": {
-        "h": 10,
-        "w": 10,
+        "h": 8,
+        "w": 24,
         "x": 0,
-        "y": 16
+        "y": 36
       },
       "fieldConfig": {
         "defaults": {
@@ -490,10 +490,10 @@
       },
       "pluginVersion": "11.2.0",
       "gridPos": {
-        "h": 10,
-        "w": 14,
-        "x": 10,
-        "y": 16
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 24
       },
       "options": {
         "dedupStrategy": "none",
@@ -525,7 +525,7 @@
     "lambda",
     "loki",
     "todomercado",
-    "DeleteChannelLambda"
+    "overview"
   ],
   "templating": {
     "list": [
@@ -636,8 +636,8 @@
     ]
   },
   "timezone": "browser",
-  "title": "TodoMercado Lambda - DeleteChannelLambda",
-  "uid": "tm-lambda-deletechannel",
+  "title": "TodoMercado Lambdas - Overview",
+  "uid": "tm-lambdas-overview",
   "version": 1,
   "weekStart": ""
 }

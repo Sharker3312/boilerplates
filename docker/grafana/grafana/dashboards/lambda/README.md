@@ -1,49 +1,32 @@
-# Lambda Dashboards (TodoMercado)
+# TodoMercado Lambdas Dashboard
 
-Estos dashboards están listos para Loki y fueron diseñados para logs de Lambda enviados por Alloy.
+Dashboard único para operar Lambdas en Loki.
 
-## Importar dashboards
+## Archivo
 
-1. En Grafana, abre **Dashboards -> New -> Import**.
-2. Carga cualquiera de los JSON dentro de `docker/grafana/grafana/dashboards/lambda/`.
-3. En el prompt de importación, selecciona datasource Loki (UID esperado: `loki`).
+- `docker/grafana/grafana/dashboards/lambda/todomercado-lambdas-dashboard.json`
 
-## Datasource
+## Variables
 
-- Variable requerida: `datasource`.
-- Tipo esperado: Loki.
-- Si tu UID no es `loki`, selecciónalo al importar o ajusta la variable `datasource` en el dashboard.
+- `datasource`: datasource Loki.
+- `stage`: lista de stages disponibles en Loki.
+- `lambda_name`: lista dinámica de funciones según `stage`.
+- `interval`: ventana de agregación para métricas.
 
-## Cambiar stage
+Consulta usada para poblar `lambda_name`:
 
-- Usa la variable `stage` en la parte superior del dashboard.
-- Valor por defecto: `All`.
-- Valores detectados en Loki al momento de construir: `dev`, `unknown`.
-- La variable `lambda_name` ahora se llena automáticamente por `stage` con:
-  `label_values({job=~"lambda|.*lambda.*", stage=~"${stage:regex}"}, function)`.
+`label_values({job=~"lambda|.*lambda.*", stage=~"${stage:regex}"}, function)`
 
-## Nota de labels y adaptación
+## Importación manual
 
-Labels reales detectados en Loki: `function`, `job`, `log_group`, `log_stream`, `region`, `service_name`, `source`, `stage`, `version`, `filename`.
+1. Grafana -> Dashboards -> New -> Import.
+2. Importa `todomercado-lambdas-dashboard.json`.
+3. Selecciona datasource Loki.
 
-Las queries usan filtro directo por función seleccionada:
+## Provisioning en este stack
 
-- `function=~"${lambda_name:regex}"`
+El provisioning apunta a:
 
-## Mapeo dashboard -> lambda -> queries principales
+- `/var/lib/grafana/dashboards/lambda`
 
-| Dashboard JSON | Lambda | Invocations query (principal) | Errors query (principal) |
-|---|---|---|---|
-| api-lambda-dashboard.json | ApiLambda | `sum(count_over_time({job=~"lambda|.*lambda.*", stage=~"${stage:regex}", function=~"${lambda_name:regex}"} |~ "(\"type\":\"platform.report\"|REPORT RequestId:)" [$interval]))` | `sum(count_over_time({job=~"lambda|.*lambda.*", stage=~"${stage:regex}", function=~"${lambda_name:regex}"} |~ "(?i)(\berror\b|\bexception\b|\btraceback\b|task timed out|runtime exited)" [$interval]))` |
-| pre-signup-lambda-dashboard.json | PreSignUpLambda | igual que arriba (cambia `lambda_name` por default `.*PreSignUpLambda.*`) | igual que arriba |
-| post-confirmation-lambda-dashboard.json | PostConfirmationLambda | igual que arriba (cambia `lambda_name` por default `.*PostConfirmationLambda.*`) | igual que arriba |
-| pre-token-generation-lambda-dashboard.json | PreTokenGenerationLambda | igual que arriba (cambia `lambda_name` por default `.*PreTokenGenerationLambda.*`) | igual que arriba |
-| start-streaming-lambda-dashboard.json | StartStreamingLambda | igual que arriba (cambia `lambda_name` por default `.*StartStreamingLambda.*`) | igual que arriba |
-| stop-streaming-lambda-dashboard.json | StopStreamingLambda | igual que arriba (cambia `lambda_name` por default `.*StopStreamingLambda.*`) | igual que arriba |
-| ivs-event-handler-lambda-dashboard.json | IvsEventHandlerLambda | igual que arriba (cambia `lambda_name` por default `.*IvsEventHandlerLambda.*`) | igual que arriba |
-| delete-channel-lambda-dashboard.json | DeleteChannelLambda | igual que arriba (cambia `lambda_name` por default `.*DeleteChannelLambda.*`) | igual que arriba |
-| event-bid-lambda-dashboard.json | EventBidLambda | igual que arriba (cambia `lambda_name` por default `.*EventBidLambda.*`) | igual que arriba |
-| invoicing-lambda-dashboard.json | InvoicingLambda | igual que arriba (cambia `lambda_name` por default `.*InvoicingLambda.*`) | igual que arriba |
-| seed-database-lambda-dashboard.json | SeedDatabaseLambda | igual que arriba (cambia `lambda_name` por default `.*SeedDatabaseLambda.*`) | igual que arriba |
-| show-reminders-lambda-dashboard.json | ShowRemindersLambda | igual que arriba (cambia `lambda_name` por default `.*ShowRemindersLambda.*`) | igual que arriba |
-| migration-function-dashboard.json | MigrationFunction | igual que arriba (cambia `lambda_name` por default `.*MigrationFunction.*`) | igual que arriba |
+Por eso, al desplegar en Coolify, este dashboard aparece automáticamente en la carpeta `Observability`.
