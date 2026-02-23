@@ -58,6 +58,15 @@ loki.write "default" {
   }
 }
 
+loki.source.api "ingest" {
+  http {
+    listen_address = "0.0.0.0"
+    listen_port    = 9999
+  }
+
+  forward_to = [loki.write.default.receiver]
+}
+
 otelcol.exporter.debug "cw" {
   verbosity = "detailed"
 }

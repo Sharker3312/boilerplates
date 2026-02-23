@@ -41,6 +41,7 @@ services:
     ports:
       - "4318:4318"
       - "4317:4317"
+      - "9999:9999"
     volumes:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
     environment:
