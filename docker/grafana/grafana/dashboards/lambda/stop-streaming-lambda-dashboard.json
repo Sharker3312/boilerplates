@@ -1,0 +1,638 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "id": 1,
+      "type": "timeseries",
+      "title": "Invocaciones por minuto",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval]))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "Errores por minuto",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |~ \"(?i)(\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\" [$interval]))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "Error rate (%)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "100 * (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |~ \"(?i)(\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\" [$interval])) / (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) + 0.000001))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "timeseries",
+      "title": "Cold starts por minuto",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$interval]))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Duration p50 / p95 / p99 (ms)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 14,
+        "x": 0,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 500
+              },
+              {
+                "color": "red",
+                "value": 1000
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "(max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "queryType": "range",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "(max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "queryType": "range",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "(max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "queryType": "range",
+          "refId": "C"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Max memory used (MB)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 8
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "(max(max_over_time(({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"\\\"type\\\":\\\"platform.report\\\"\" | json max_mem=\"record.metrics.maxMemoryUsedMB\" | unwrap max_mem [$interval]))) or max(max_over_time(({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |= \"REPORT RequestId:\" | regexp \"Max Memory Used: (?P<max_mem>[0-9]+) MB\" | unwrap max_mem [$interval]))))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "table",
+      "title": "Top mensajes de error",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 0,
+        "y": 16
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Value"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "topk(10, sum by (error_message) (count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\" |~ \"(?i)(\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\" | regexp \"(?P<error_message>(?i)(error|exception|traceback|task timed out|runtime exited).*)\" [$__range])))",
+          "queryType": "instant",
+          "refId": "A",
+          "instant": true
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "logs",
+      "title": "Logs en tiempo real",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 10,
+        "w": 14,
+        "x": 10,
+        "y": 16
+      },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}\"} | label_format lambda_ref=\"{{.function}} {{.log_group}} {{.service_name}}\" | lambda_ref=~\".*${lambda_name:regex}.*\"",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": [
+    "lambda",
+    "loki",
+    "todomercado",
+    "StopStreamingLambda"
+  ],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "loki",
+          "value": "loki"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Datasource",
+        "multi": false,
+        "name": "datasource",
+        "options": [],
+        "query": "loki",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": true,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "loki",
+          "uid": "${datasource}"
+        },
+        "definition": "label_values({job=~\"lambda|.*lambda.*\"}, stage)",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Stage",
+        "multi": false,
+        "name": "stage",
+        "options": [],
+        "query": "label_values({job=~\"lambda|.*lambda.*\"}, stage)",
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": ".*StopStreamingLambda.*",
+          "value": ".*StopStreamingLambda.*"
+        },
+        "hide": 0,
+        "label": "Lambda Name (regex)",
+        "name": "lambda_name",
+        "options": [
+          {
+            "selected": true,
+            "text": ".*StopStreamingLambda.*",
+            "value": ".*StopStreamingLambda.*"
+          }
+        ],
+        "query": ".*StopStreamingLambda.*",
+        "skipUrlSync": false,
+        "type": "textbox"
+      },
+      {
+        "auto": true,
+        "auto_count": 30,
+        "auto_min": "30s",
+        "current": {
+          "selected": true,
+          "text": "5m",
+          "value": "5m"
+        },
+        "hide": 0,
+        "label": "Interval",
+        "name": "interval",
+        "options": [],
+        "query": "1m,5m,15m,30m,1h",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "interval"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
+  "timezone": "browser",
+  "title": "TodoMercado Lambda - StopStreamingLambda",
+  "uid": "tm-lambda-stopstreaming",
+  "version": 1,
+  "weekStart": ""
+}
