@@ -5,7 +5,7 @@ Estos dashboards están listos para Loki y fueron diseñados para logs de Lambda
 ## Importar dashboards
 
 1. En Grafana, abre **Dashboards -> New -> Import**.
-2. Carga cualquiera de los JSON dentro de `grafana/dashboards/lambdas/`.
+2. Carga cualquiera de los JSON dentro de `docker/grafana/grafana/dashboards/lambda/`.
 3. En el prompt de importación, selecciona datasource Loki (UID esperado: `loki`).
 
 ## Datasource
@@ -19,24 +19,22 @@ Estos dashboards están listos para Loki y fueron diseñados para logs de Lambda
 - Usa la variable `stage` en la parte superior del dashboard.
 - Valor por defecto: `All`.
 - Valores detectados en Loki al momento de construir: `dev`, `unknown`.
+- La variable `lambda_name` ahora se llena automáticamente por `stage` con:
+  `label_values({job=~"lambda|.*lambda.*", stage=~"${stage:regex}"}, function)`.
 
 ## Nota de labels y adaptación
 
 Labels reales detectados en Loki: `function`, `job`, `log_group`, `log_stream`, `region`, `service_name`, `source`, `stage`, `version`, `filename`.
 
-Para evitar bloqueo por schema, las queries no dependen únicamente de `function`.
-Se usa:
+Las queries usan filtro directo por función seleccionada:
 
-- `label_format lambda_ref="{{.function}} {{.log_group}} {{.service_name}}"`
-- Filtro por lambda: `lambda_ref=~".*${lambda_name:regex}.*"`
-
-Esto permite que, si `function` falta, siga funcionando con `log_group` o `service_name`.
+- `function=~"${lambda_name:regex}"`
 
 ## Mapeo dashboard -> lambda -> queries principales
 
 | Dashboard JSON | Lambda | Invocations query (principal) | Errors query (principal) |
 |---|---|---|---|
-| api-lambda-dashboard.json | ApiLambda | `sum(count_over_time({job=~"lambda|.*lambda.*", stage=~"${stage:regex}"} | label_format lambda_ref="{{.function}} {{.log_group}} {{.service_name}}" | lambda_ref=~".*${lambda_name:regex}.*" |~ "(\"type\":\"platform.report\"|REPORT RequestId:)" [$interval]))` | `sum(count_over_time({job=~"lambda|.*lambda.*", stage=~"${stage:regex}"} | label_format lambda_ref="{{.function}} {{.log_group}} {{.service_name}}" | lambda_ref=~".*${lambda_name:regex}.*" |~ "(?i)(\berror\b|\bexception\b|\btraceback\b|task timed out|runtime exited)" [$interval]))` |
+| api-lambda-dashboard.json | ApiLambda | `sum(count_over_time({job=~"lambda|.*lambda.*", stage=~"${stage:regex}", function=~"${lambda_name:regex}"} |~ "(\"type\":\"platform.report\"|REPORT RequestId:)" [$interval]))` | `sum(count_over_time({job=~"lambda|.*lambda.*", stage=~"${stage:regex}", function=~"${lambda_name:regex}"} |~ "(?i)(\berror\b|\bexception\b|\btraceback\b|task timed out|runtime exited)" [$interval]))` |
 | pre-signup-lambda-dashboard.json | PreSignUpLambda | igual que arriba (cambia `lambda_name` por default `.*PreSignUpLambda.*`) | igual que arriba |
 | post-confirmation-lambda-dashboard.json | PostConfirmationLambda | igual que arriba (cambia `lambda_name` por default `.*PostConfirmationLambda.*`) | igual que arriba |
 | pre-token-generation-lambda-dashboard.json | PreTokenGenerationLambda | igual que arriba (cambia `lambda_name` por default `.*PreTokenGenerationLambda.*`) | igual que arriba |
