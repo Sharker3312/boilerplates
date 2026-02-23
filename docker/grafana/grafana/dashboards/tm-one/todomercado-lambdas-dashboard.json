@@ -471,7 +471,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} |~ \"(?i)(an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\"",
+          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\"",
           "queryType": "range",
           "refId": "A"
         }
