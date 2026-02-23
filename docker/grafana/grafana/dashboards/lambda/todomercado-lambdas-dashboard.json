@@ -141,7 +141,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\[ERROR\\]|validationexception|accessdeniedexception|\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(validationexception|accessdeniedexception|error|exception|traceback|task timed out|runtime exited)\" [$interval]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -204,7 +204,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "100 * (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\[ERROR\\]|validationexception|accessdeniedexception|\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\" [$interval])) / (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) + 0.000001))",
+          "expr": "100 * (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(validationexception|accessdeniedexception|error|exception|traceback|task timed out|runtime exited)\" [$interval])) / (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) + 0.000001))",
           "queryType": "range",
           "refId": "A"
         }
@@ -471,7 +471,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\[ERROR\\]|validationexception|accessdeniedexception|\\berror\\b|\\bexception\\b|\\btraceback\\b|task timed out|runtime exited)\"",
+          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(validationexception|accessdeniedexception|error|exception|traceback|task timed out|runtime exited)\"",
           "queryType": "range",
           "refId": "A"
         }
@@ -637,7 +637,7 @@
   "timezone": "browser",
   "title": "TodoMercado Lambdas - Overview",
   "uid": "tm-lambdas-overview",
-  "version": 2,
+  "version": 3,
   "weekStart": "",
   "description": "Dashboard unificado de Lambdas de TodoMercado. Permite seleccionar stage y función para monitorear invocaciones, errores, error rate, cold starts, duración, memoria y logs en vivo."
 }
