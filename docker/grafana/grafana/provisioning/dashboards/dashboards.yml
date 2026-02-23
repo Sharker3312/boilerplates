@@ -11,6 +11,26 @@ providers:
     options:
       path: /var/lib/grafana/dashboards/core
 
+  - name: "Dermagroup"
+    orgId: 1
+    folder: "Dermagroup"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards/dermagroup
+
+  - name: "Heyyou"
+    orgId: 1
+    folder: "Heyyou"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards/heyyou
+
   - name: "TodoMercado"
     orgId: 1
     folder: "TM"
