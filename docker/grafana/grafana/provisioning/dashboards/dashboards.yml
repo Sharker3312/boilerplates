@@ -4,16 +4,18 @@ providers:
   - name: "Stack Dashboards"
     orgId: 1
     folder: "Observability"
+    folderUid: "observability"
     type: file
     disableDeletion: false
     editable: true
     updateIntervalSeconds: 30
     options:
-      path: /var/lib/grafana/dashboards
+      path: /var/lib/grafana/dashboards/core
 
-  - name: "Lambda Dashboards"
+  - name: "TodoMercado"
     orgId: 1
-    folder: "Observability"
+    folder: "TM"
+    folderUid: "todo-mercado"
     type: file
     disableDeletion: false
     editable: true

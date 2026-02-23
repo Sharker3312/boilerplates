@@ -29,4 +29,4 @@ El provisioning apunta a:
 
 - `/var/lib/grafana/dashboards/lambda`
 
-Por eso, al desplegar en Coolify, este dashboard aparece automáticamente en la carpeta `Observability`.
+Por eso, al desplegar en Coolify, este dashboard aparece automáticamente en la carpeta `Lambdas`.
