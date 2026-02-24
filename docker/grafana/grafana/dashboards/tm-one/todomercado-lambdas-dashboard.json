@@ -515,8 +515,8 @@
           "refId": "A"
         }
       ],
-      "timeFrom": "${logs_days}",
-      "description": "Logs en tiempo real con histórico configurable por días usando el selector Logs (días), filtrado por stage y Lambda seleccionada(s)."
+      "timeFrom": "${logs_range}",
+      "description": "Logs en tiempo real con rango configurable manualmente. Usa Logs (rango): 5m/15m para ver lo actual y 1d+ para histórico."
     }
   ],
   "refresh": "10s",
@@ -600,16 +600,16 @@
       {
         "current": {
           "selected": true,
-          "text": "1d",
-          "value": "1d"
+          "text": "15m",
+          "value": "15m"
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Logs (días)",
+        "label": "Logs (rango)",
         "multi": false,
-        "name": "logs_days",
+        "name": "logs_range",
         "options": [],
-        "query": "1d,2d,3d,7d,14d,30d",
+        "query": "5m,15m,30m,1h,6h,12h,1d,2d,3d,7d,14d,30d",
         "refresh": 2,
         "skipUrlSync": false,
         "type": "custom"
