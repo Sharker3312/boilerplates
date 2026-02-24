@@ -6,6 +6,13 @@ storage:
   path: /data/data.db
 
 endpoints:
+  - name: Apacha - Staging
+    group: ERP
+    url: "https://erp-apacha-dev.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] > 0"
+      - "[STATUS] < 500"
   - name: Dermagroup - Prod
     group: ERP
     url: "https://erp-dermagroup.deepzide.com"

@@ -427,7 +427,7 @@
     {
       "id": 7,
       "type": "logs",
-      "title": "Errores (JSON crudo)",
+      "title": "Errors",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -481,7 +481,7 @@
     {
       "id": 8,
       "type": "logs",
-      "title": "Logs en vivo (streaming)",
+      "title": "Life Logs",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
