@@ -78,7 +78,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -141,7 +141,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} |~ \"(?i)(an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} |~ \"(?i)(an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\" [$interval]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -204,7 +204,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "100 * ((sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} [$interval])) + sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\", detected_level!=\"error\"} |~ \"(?i)(runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\" [$interval]))) / (sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) + 0.000001))",
+          "expr": "100 * ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} [$interval])) + sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\", detected_level!=\"error\"} |~ \"(?i)(runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\" [$interval]))) / (sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) + 0.000001))",
           "queryType": "range",
           "refId": "A"
         }
@@ -267,7 +267,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$interval]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -334,7 +334,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "expr": "(max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
           "queryType": "range",
           "refId": "A"
         },
@@ -344,7 +344,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "expr": "(max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
           "queryType": "range",
           "refId": "B"
         },
@@ -354,7 +354,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "expr": "(max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
           "queryType": "range",
           "refId": "C"
         }
@@ -417,7 +417,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(max_over_time(({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json max_mem=\"record.metrics.maxMemoryUsedMB\" | unwrap max_mem [$interval]))) or max(max_over_time(({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Max Memory Used: (?P<max_mem>[0-9]+) MB\" | unwrap max_mem [$interval]))))",
+          "expr": "(max(max_over_time(({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json max_mem=\"record.metrics.maxMemoryUsedMB\" | unwrap max_mem [$interval]))) or max(max_over_time(({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Max Memory Used: (?P<max_mem>[0-9]+) MB\" | unwrap max_mem [$interval]))))",
           "queryType": "range",
           "refId": "A"
         }
@@ -471,12 +471,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\"",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\"",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "description": "Errores en JSON crudo. Incluye fallback de stage `unknown` para no perder eventos cuando la telemetría no etiqueta stage correctamente."
+      "description": "Errores en JSON crudo. Filtrado por Lambda seleccionada; soporta logs con stage `unknown` al no depender del label stage."
     },
     {
       "id": 8,
@@ -510,12 +510,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"}",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"}",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "description": "Streaming en vivo de todos los tipos de logs (sin filtro por nivel o contenido), filtrado solo por stage y Lambda."
+      "description": "Streaming en vivo de todos los tipos de logs (sin filtro por nivel o contenido), filtrado por Stage (prefijo de función) y Lambda."
     },
     {
       "id": 9,
@@ -549,13 +549,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\", function=~\"${lambda_name:regex}\"}",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"}",
           "queryType": "range",
           "refId": "A"
         }
       ],
       "timeFrom": "${logs_days}",
-      "description": "Histórico de logs filtrable por días usando el selector Logs históricos (días)."
+      "description": "Histórico de logs filtrable por días usando el selector Logs históricos (días), con filtro por Stage (prefijo de función) y Lambda."
     }
   ],
   "refresh": "10s",
@@ -597,16 +597,16 @@
           "type": "loki",
           "uid": "${datasource}"
         },
-        "definition": "label_values({job=~\"lambda|.*lambda.*\"}, stage)",
+        "definition": "label_values({job=~\"lambda|.*lambda.*\"}, function)",
         "hide": 0,
         "includeAll": true,
-        "label": "Stage",
+        "label": "Stage (prefijo función)",
         "multi": false,
         "name": "stage",
         "options": [],
-        "query": "label_values({job=~\"lambda|.*lambda.*\"}, stage)",
+        "query": "label_values({job=~\"lambda|.*lambda.*\"}, function)",
         "refresh": 2,
-        "regex": "",
+        "regex": "/^([^-]+)-.*/",
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
@@ -622,14 +622,14 @@
           "type": "loki",
           "uid": "${datasource}"
         },
-        "definition": "label_values({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\"}, function)",
+        "definition": "label_values({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"}, function)",
         "hide": 0,
         "includeAll": true,
         "label": "Lambda",
         "multi": true,
         "name": "lambda_name",
         "options": [],
-        "query": "label_values({job=~\"lambda|.*lambda.*\", stage=~\"${stage:regex}|unknown\"}, function)",
+        "query": "label_values({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"}, function)",
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
