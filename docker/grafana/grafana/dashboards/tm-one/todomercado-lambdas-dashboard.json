@@ -515,10 +515,11 @@
           "refId": "A"
         }
       ],
-      "description": "Stream de logs en tiempo real filtrado por stage y Lambda seleccionada(s)."
+      "timeFrom": "${logs_days}",
+      "description": "Logs en tiempo real con histórico configurable por días usando el selector Logs (días), filtrado por stage y Lambda seleccionada(s)."
     }
   ],
-  "refresh": "30s",
+  "refresh": "10s",
   "schemaVersion": 39,
   "tags": [
     "lambda",
@@ -595,6 +596,23 @@
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
+      },
+      {
+        "current": {
+          "selected": true,
+          "text": "1d",
+          "value": "1d"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Logs (días)",
+        "multi": false,
+        "name": "logs_days",
+        "options": [],
+        "query": "1d,2d,3d,7d,14d,30d",
+        "refresh": 2,
+        "skipUrlSync": false,
+        "type": "custom"
       },
       {
         "auto": true,
