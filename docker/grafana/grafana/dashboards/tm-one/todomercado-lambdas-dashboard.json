@@ -141,12 +141,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} |~ \"(?i)(an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$interval])) or vector(0)",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "description": "Cantidad de errores por intervalo usando patrones: ERROR, Exception, Traceback, Task timed out, Runtime exited."
+      "description": "Cantidad de errores por intervalo detectados por patrones en el mensaje (sin depender de detected_level)."
     },
     {
       "id": 3,
@@ -204,7 +204,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "100 * ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\", detected_level=\"error\"} [$interval])) + sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\", detected_level!=\"error\"} |~ \"(?i)(runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\" [$interval]))) / (sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) + 0.000001))",
+          "expr": "100 * (((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$interval])) or vector(0)) / ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) or vector(0)) + 0.000001)))",
           "queryType": "range",
           "refId": "A"
         }
