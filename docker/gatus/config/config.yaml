@@ -41,9 +41,16 @@ endpoints:
     conditions:
       - "[STATUS] > 0"
       - "[STATUS] < 500"
-  - name: TM - API
+  - name: API - Prod
     group: Todomercado
     url: "https://p4d8jtoinl.execute-api.us-east-1.amazonaws.com/health"
+    interval: 1m
+    conditions:
+      - "[STATUS] > 0"
+      - "[STATUS] < 500"
+  - name: API - Dev
+    group: Todomercado
+    url: "https://kmiowpszoj.execute-api.us-east-1.amazonaws.com/health"
     interval: 1m
     conditions:
       - "[STATUS] > 0"
