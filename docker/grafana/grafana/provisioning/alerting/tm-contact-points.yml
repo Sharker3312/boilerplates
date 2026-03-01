@@ -8,7 +8,8 @@ contactPoints:
         type: telegram
         disableResolveMessage: true
         settings:
-          bottoken: !!str "${TELEGRAM_BOT_TOKEN}"
-          chatid: !!str "${TELEGRAM_CHAT_ID}"
+          chatid: '$TELEGRAM_CHAT_ID'
           disable_notification: false
           message: '{{ template "tm.telegram.error_logs" . }}'
+        secure_settings:
+          bottoken: '$TELEGRAM_BOT_TOKEN'
