@@ -20,7 +20,7 @@ groups:
                 type: loki
                 uid: loki
               editorMode: code
-              expr: 'topk(20, sum by (function, error_message) (count_over_time({job=~"lambda|.*lambda.*", function=~".+"} |~ "(?i)(\\[error\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)" | regexp "(?P<error_message>(?i)(An error occurred \\([^\\)]+\\) when calling [^:]+: .*|Exception[^\\n]*|Traceback[^\\n]*|Task timed out[^\\n]*|Runtime exited[^\\n]*|\\[ERROR\\][^\\n]*|error:[^\\n]*))" | error_message != "" [5m])))'
+              expr: 'topk(20, sum by (function, error_message) (count_over_time({job=~"lambda|.*lambda.*", function=~".+"} |~ "(?i)error" | regexp "(?P<error_message>.+)" | error_message != "" [5m])))'
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200
