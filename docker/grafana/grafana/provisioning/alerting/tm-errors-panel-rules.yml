@@ -8,7 +8,7 @@ groups:
     rules:
       - uid: tm_errors_panel_logs_telegram
         title: TM Errors panel logs detected
-        condition: C
+        condition: B
         data:
           - refId: A
             relativeTimeRange:
@@ -24,10 +24,9 @@ groups:
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200
-              queryType: instant
               range: false
               refId: A
-          - refId: C
+          - refId: B
             datasourceUid: __expr__
             model:
               conditions:
@@ -39,7 +38,7 @@ groups:
                     type: and
                   query:
                     params:
-                      - C
+                      - A
                   reducer:
                     params: []
                     type: last
@@ -50,8 +49,8 @@ groups:
               expression: A
               intervalMs: 1000
               maxDataPoints: 43200
-              refId: C
-              type: threshold
+              refId: B
+              type: classic_conditions
         dashboardUid: tm-lambdas-overview
         panelId: 7
         noDataState: OK
