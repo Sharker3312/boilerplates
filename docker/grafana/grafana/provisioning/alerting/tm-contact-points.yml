@@ -1,0 +1,14 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: tm-errors-telegram
+    receivers:
+      - uid: tm_errors_telegram
+        type: telegram
+        disableResolveMessage: true
+        settings:
+          bottoken: ${TELEGRAM_BOT_TOKEN}
+          chatid: ${TELEGRAM_CHAT_ID}
+          disable_notification: false
+          message: '{{ template "tm.telegram.error_logs" . }}'
