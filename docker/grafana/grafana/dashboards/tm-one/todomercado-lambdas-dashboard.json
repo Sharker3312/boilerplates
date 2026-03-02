@@ -548,8 +548,8 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(label_replace(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\"))",
-          "legendFormat": "{{lambda_clean}}",
+          "expr": "sort_desc(sum by (function) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"function\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
         }
@@ -609,8 +609,8 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(label_replace(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\"))",
-          "legendFormat": "{{lambda_clean}}",
+          "expr": "sort_desc(sum by (function) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range]), \"function\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
         }
