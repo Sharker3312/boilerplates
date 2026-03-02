@@ -494,7 +494,7 @@
     {
       "id": 11,
       "type": "barchart",
-      "title": "Top 5 Lambdas por errores",
+      "title": "Lambdas por errores (stage)",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -556,18 +556,18 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "topk(5, sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "expr": "sort_desc(sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
           "legendFormat": "{{lambda_clean}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "description": "Barras horizontales: top 5 lambdas con mayor cantidad de errores en el rango seleccionado, mostrando nombre limpio sin sufijos numéricos largos."
+      "description": "Barras horizontales de todas las lambdas del stage seleccionado, ordenadas por cantidad de errores y con nombre limpio sin sufijos numéricos largos."
     },
     {
       "id": 14,
       "type": "barchart",
-      "title": "Top 5 Lambdas por invocaciones",
+      "title": "Lambdas por invocaciones (stage)",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -625,13 +625,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "topk(5, sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "expr": "sort_desc(sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
           "legendFormat": "{{lambda_clean}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "description": "Barras horizontales: top 5 lambdas con más invocaciones en el rango seleccionado, mostrando nombre limpio sin sufijos numéricos largos."
+      "description": "Barras horizontales de todas las lambdas del stage seleccionado, ordenadas por invocaciones y con nombre limpio sin sufijos numéricos largos."
     },
     {
       "id": 12,
