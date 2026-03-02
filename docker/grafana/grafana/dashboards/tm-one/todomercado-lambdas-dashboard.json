@@ -541,6 +541,15 @@
         },
         "showUnfilled": true
       },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$",
+            "renamePattern": "$1"
+          }
+        }
+      ],
       "targets": [
         {
           "datasource": {
@@ -548,7 +557,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (function) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"function\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "expr": "sort_desc(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])))",
           "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
@@ -602,6 +611,15 @@
         },
         "showUnfilled": true
       },
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$",
+            "renamePattern": "$1"
+          }
+        }
+      ],
       "targets": [
         {
           "datasource": {
@@ -609,7 +627,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (function) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range]), \"function\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "expr": "sort_desc(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])))",
           "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
