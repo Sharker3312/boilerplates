@@ -532,6 +532,7 @@
       "options": {
         "displayMode": "basic",
         "orientation": "horizontal",
+        "namePlacement": "left",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -541,15 +542,6 @@
         },
         "showUnfilled": true
       },
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$",
-            "renamePattern": "$1"
-          }
-        }
-      ],
       "targets": [
         {
           "datasource": {
@@ -602,6 +594,7 @@
       "options": {
         "displayMode": "basic",
         "orientation": "horizontal",
+        "namePlacement": "left",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -611,15 +604,6 @@
         },
         "showUnfilled": true
       },
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$",
-            "renamePattern": "$1"
-          }
-        }
-      ],
       "targets": [
         {
           "datasource": {
