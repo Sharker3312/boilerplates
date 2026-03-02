@@ -5,7 +5,7 @@ templates:
     name: tm.telegram.error_logs
     template: |-
       {{ define "tm.telegram.error_logs" -}}
-      {{- if .Alerts.Firing -}}
+      {{- if gt (len .Alerts.Firing) 0 -}}
       {{- range .Alerts.Firing }}
       TM ERROR LOG
       Lambda: {{ .Labels.function }}
@@ -14,5 +14,8 @@ templates:
       Panel: {{ .Annotations.panel_url }}
 
       {{- end -}}
+      {{- else -}}
+      TM ALERT TEST
+      Contact point Telegram operativo.
       {{- end -}}
       {{- end }}
