@@ -435,9 +435,9 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 8,
+        "w": 12,
         "x": 0,
-        "y": 24
+        "y": 42
       },
       "fieldConfig": {
         "defaults": {
@@ -502,9 +502,9 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 24
+        "w": 12,
+        "x": 0,
+        "y": 34
       },
       "fieldConfig": {
         "defaults": {
@@ -556,13 +556,82 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "topk(5, sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])))",
-          "legendFormat": "{{function}}",
+          "expr": "topk(5, sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "legendFormat": "{{lambda_clean}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "description": "Barras horizontales: top 5 funciones Lambda con mayor cantidad de errores en el rango de tiempo seleccionado."
+      "description": "Barras horizontales: top 5 lambdas con mayor cantidad de errores en el rango seleccionado, mostrando nombre limpio sin sufijos numéricos largos."
+    },
+    {
+      "id": 14,
+      "type": "barchart",
+      "title": "Top 5 Lambdas por invocaciones",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "horizontal",
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0,
+        "showValue": "always",
+        "stacking": "none",
+        "groupWidth": 0.7,
+        "barWidth": 0.9,
+        "barRadius": 0,
+        "fullHighlight": false,
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "legend": {
+          "displayMode": "hidden",
+          "placement": "bottom",
+          "showLegend": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "topk(5, sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "legendFormat": "{{lambda_clean}}",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Barras horizontales: top 5 lambdas con más invocaciones en el rango seleccionado, mostrando nombre limpio sin sufijos numéricos largos."
     },
     {
       "id": 12,
@@ -575,9 +644,9 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 24
+        "w": 12,
+        "x": 12,
+        "y": 42
       },
       "fieldConfig": {
         "defaults": {
@@ -632,6 +701,76 @@
       "description": "Cantidad de timeouts detectados por intervalo, filtrada por Stage y Lambda."
     },
     {
+      "id": 13,
+      "type": "table",
+      "title": "Top Lambdas por errores (tabla)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 50
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false,
+          "reducer": [
+            "sum"
+          ],
+          "countRows": false,
+          "fields": ""
+        },
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Value"
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "topk(10, sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "legendFormat": "{{lambda_clean}}",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Tabla de lambdas con mayor número de errores en el rango seleccionado, mostrando nombre limpio sin sufijos numéricos largos."
+    },
+    {
       "id": 7,
       "type": "logs",
       "title": "Errors",
@@ -644,7 +783,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 24
       },
       "fieldConfig": {
         "defaults": {
@@ -698,7 +837,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 42
+        "y": 58
       },
       "options": {
         "dedupStrategy": "none",
@@ -737,7 +876,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 50
+        "y": 66
       },
       "options": {
         "dedupStrategy": "none",
