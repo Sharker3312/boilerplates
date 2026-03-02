@@ -78,7 +78,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -267,7 +267,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$interval]))",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$interval]))",
           "queryType": "range",
           "refId": "A"
         }
@@ -334,7 +334,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "expr": "(max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.50, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
           "queryType": "range",
           "refId": "A"
         },
@@ -344,7 +344,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "expr": "(max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
           "queryType": "range",
           "refId": "B"
         },
@@ -354,7 +354,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
+          "expr": "(max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$interval]))) or max(quantile_over_time(0.99, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$interval]))))",
           "queryType": "range",
           "refId": "C"
         }
@@ -417,12 +417,210 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "(max(max_over_time(({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json max_mem=\"record.metrics.maxMemoryUsedMB\" | unwrap max_mem [$interval]))) or max(max_over_time(({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Max Memory Used: (?P<max_mem>[0-9]+) MB\" | unwrap max_mem [$interval]))))",
+          "expr": "(max(max_over_time(({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json max_mem=\"record.metrics.maxMemoryUsedMB\" | unwrap max_mem [$interval]))) or max(max_over_time(({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Max Memory Used: (?P<max_mem>[0-9]+) MB\" | unwrap max_mem [$interval]))))",
           "queryType": "range",
           "refId": "A"
         }
       ],
       "description": "Máximo de memoria usada (MB) durante el intervalo, extraído de REPORT/platform.report."
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Cold start rate (%)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 0,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 15
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "100 * (((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$interval])) or vector(0)) / ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) or vector(0)) + 0.000001)))",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "description": "Porcentaje de cold starts: cold starts / invocaciones en el intervalo seleccionado, filtrado por Stage y Lambda."
+    },
+    {
+      "id": 11,
+      "type": "bargauge",
+      "title": "Top 5 Lambdas por errores",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 8,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "displayMode": "basic",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "topk(5, sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])))",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Top 5 funciones Lambda con mayor cantidad de errores en el rango de tiempo seleccionado."
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "Timeouts por minuto",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 24
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(task timed out|timed out after)\" [$interval])) or vector(0)",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
+      "description": "Cantidad de timeouts detectados por intervalo, filtrada por Stage y Lambda."
     },
     {
       "id": 7,
@@ -434,10 +632,10 @@
       },
       "pluginVersion": "11.2.0",
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 36
+        "y": 32
       },
       "fieldConfig": {
         "defaults": {
@@ -488,10 +686,10 @@
       },
       "pluginVersion": "11.2.0",
       "gridPos": {
-        "h": 12,
+        "h": 8,
         "w": 24,
         "x": 0,
-        "y": 24
+        "y": 42
       },
       "options": {
         "dedupStrategy": "none",
@@ -510,7 +708,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"}",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"}",
           "queryType": "range",
           "refId": "A"
         }
@@ -530,7 +728,7 @@
         "h": 10,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 50
       },
       "options": {
         "dedupStrategy": "none",
@@ -549,7 +747,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"}",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"}",
           "queryType": "range",
           "refId": "A"
         }
@@ -558,7 +756,7 @@
       "description": "Histórico de logs filtrable por días usando el selector Logs históricos (días), con filtro por Stage (prefijo de función) y Lambda."
     }
   ],
-  "refresh": "10s",
+  "refresh": "30s",
   "schemaVersion": 39,
   "tags": [
     "lambda",
@@ -696,5 +894,5 @@
   "uid": "tm-lambdas-overview",
   "version": 6,
   "weekStart": "",
-  "description": "Dashboard unificado de Lambdas de TodoMercado. Permite seleccionar stage y función para monitorear invocaciones, errores, error rate, cold starts, duración, memoria y logs en vivo."
+  "description": "Dashboard unificado de Lambdas de TodoMercado. Permite seleccionar stage y función para monitorear invocaciones, errores, error rate, cold starts, cold start rate, timeouts, latencia, memoria y logs."
 }
