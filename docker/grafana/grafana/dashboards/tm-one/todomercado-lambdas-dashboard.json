@@ -141,12 +141,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$interval])) or vector(0)",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$interval])) or vector(0)",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "description": "Cantidad de errores por intervalo detectados por patrones en el mensaje (sin depender de detected_level)."
+      "description": "Cantidad de errores por intervalo detectados por patrones en el mensaje, filtrada por Stage (prefijo de función) y Lambda seleccionada (sin depender de detected_level)."
     },
     {
       "id": 3,
@@ -204,12 +204,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "100 * (((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$interval])) or vector(0)) / ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) or vector(0)) + 0.000001)))",
+          "expr": "100 * (((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$interval])) or vector(0)) / ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$interval])) or vector(0)) + 0.000001)))",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "description": "Porcentaje de error: errores / invocaciones en el intervalo seleccionado."
+      "description": "Porcentaje de error: errores / invocaciones en el intervalo seleccionado, filtrado por Stage (prefijo de función) y Lambda seleccionada."
     },
     {
       "id": 4,
@@ -471,12 +471,12 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\"",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception)\"",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "description": "Errores en JSON crudo. Filtrado por Lambda seleccionada; soporta logs con stage `unknown` al no depender del label stage."
+      "description": "Errores en JSON crudo. Filtrado por Stage seleccionado (prefijo de función) y Lambda seleccionada."
     },
     {
       "id": 8,
