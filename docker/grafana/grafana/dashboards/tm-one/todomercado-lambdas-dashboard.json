@@ -493,7 +493,7 @@
     },
     {
       "id": 11,
-      "type": "barchart",
+      "type": "bargauge",
       "title": "Lambdas por errores (stage)",
       "datasource": {
         "type": "loki",
@@ -530,24 +530,16 @@
         "overrides": []
       },
       "options": {
+        "displayMode": "basic",
         "orientation": "horizontal",
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0,
-        "showValue": "always",
-        "stacking": "none",
-        "groupWidth": 0.7,
-        "barWidth": 0.9,
-        "barRadius": 0,
-        "fullHighlight": false,
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "legend": {
-          "displayMode": "hidden",
-          "placement": "bottom",
-          "showLegend": false
-        }
+        "showUnfilled": true
       },
       "targets": [
         {
@@ -556,17 +548,17 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "expr": "sort_desc(label_replace(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\"))",
           "legendFormat": "{{lambda_clean}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "description": "Barras horizontales de todas las lambdas del stage seleccionado, ordenadas por cantidad de errores y con nombre limpio sin sufijos numéricos largos."
+      "description": "Barras horizontales por lambda del stage seleccionado, ordenadas por cantidad de errores y con nombre limpio sin sufijos numéricos largos."
     },
     {
       "id": 14,
-      "type": "barchart",
+      "type": "bargauge",
       "title": "Lambdas por invocaciones (stage)",
       "datasource": {
         "type": "loki",
@@ -599,24 +591,16 @@
         "overrides": []
       },
       "options": {
+        "displayMode": "basic",
         "orientation": "horizontal",
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0,
-        "showValue": "always",
-        "stacking": "none",
-        "groupWidth": 0.7,
-        "barWidth": 0.9,
-        "barRadius": 0,
-        "fullHighlight": false,
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "legend": {
-          "displayMode": "hidden",
-          "placement": "bottom",
-          "showLegend": false
-        }
+        "showUnfilled": true
       },
       "targets": [
         {
@@ -625,13 +609,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
+          "expr": "sort_desc(label_replace(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\"))",
           "legendFormat": "{{lambda_clean}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "description": "Barras horizontales de todas las lambdas del stage seleccionado, ordenadas por invocaciones y con nombre limpio sin sufijos numéricos largos."
+      "description": "Barras horizontales por lambda del stage seleccionado, ordenadas por invocaciones y con nombre limpio sin sufijos numéricos largos."
     },
     {
       "id": 12,
