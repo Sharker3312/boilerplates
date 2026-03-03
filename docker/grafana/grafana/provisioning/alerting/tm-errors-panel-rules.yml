@@ -20,7 +20,7 @@ groups:
                 type: loki
                 uid: loki
               editorMode: code
-              expr: 'topk(20, sum by (function, error_message) (count_over_time({job=~"lambda|.*lambda.*", function=~".*todomercado.*"} | json record="record" | line_format "{{.record}}" |~ "(?i)error" | regexp "(?P<error_message>.+)" | error_message != "" [5m])))'
+              expr: 'topk(20, sum by (function, error_message) (count_over_time({job=~"lambda|.*lambda.*"} |~ "(?i)(\\[error\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\bfailed\\b)" | regexp "(?P<error_message>.*)" [5m])))'
               instant: true
               intervalMs: 1000
               maxDataPoints: 43200
@@ -57,7 +57,7 @@ groups:
         execErrState: Error
         for: 0m
         annotations:
-          summary: Error log detectado en TodoMercado.
+          summary: Error log detected in TodoMercado.
           count_5m: '{{ printf "%.0f" $values.A.Value }}'
           panel_url: 'https://grafana.deepzide.com/d/tm-lambdas-overview?viewPanel=7&var-lambda_name={{ $labels.function }}'
         labels:
