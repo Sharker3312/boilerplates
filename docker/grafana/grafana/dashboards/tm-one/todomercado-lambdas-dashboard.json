@@ -23,9 +23,481 @@
   "liveNow": true,
   "panels": [
     {
+      "id": 20,
+      "type": "stat",
+      "title": "Invocations",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])) or vector(0)",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Total Lambda invocations over the selected time range, filtered by stage and lambda."
+    },
+    {
+      "id": 21,
+      "type": "stat",
+      "title": "Errors",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])) or vector(0)",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Total errors over the selected time range, filtered by stage and lambda."
+    },
+    {
+      "id": 22,
+      "type": "stat",
+      "title": "Error rate (%)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "100 * (((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])) or vector(0)) / ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])) or vector(0)) + 0.000001)))",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Error rate for the selected range: errors / invocations."
+    },
+    {
+      "id": 23,
+      "type": "stat",
+      "title": "P95 duration (ms)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 400
+              },
+              {
+                "color": "red",
+                "value": 800
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "(max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"\\\"type\\\":\\\"platform.report\\\"\" | json duration=\"record.metrics.durationMs\" | unwrap duration [$__range]))) or max(quantile_over_time(0.95, ({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |= \"REPORT RequestId:\" | regexp \"Duration: (?P<duration>[0-9]+(?:\\\\.[0-9]+)?) ms\" | unwrap duration [$__range]))))",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "P95 execution duration in milliseconds over the selected range."
+    },
+    {
+      "id": 24,
+      "type": "stat",
+      "title": "Timeouts",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "red",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(task timed out|timed out after)\" [$__range])) or vector(0)",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Total timeout events over the selected range."
+    },
+    {
+      "id": 25,
+      "type": "stat",
+      "title": "Cold start rate (%)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 0
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 2
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "auto",
+        "textMode": "auto",
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "100 * (((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.initStart\\\"|INIT_START)\" [$__range])) or vector(0)) / ((sum(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])) or vector(0)) + 0.000001)))",
+          "queryType": "instant",
+          "refId": "A"
+        }
+      ],
+      "description": "Cold start rate over the selected range: cold starts / invocations."
+    },
+    {
       "id": 1,
       "type": "timeseries",
-      "title": "Invocaciones por minuto",
+      "title": "Invocations per minute",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -35,7 +507,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 4
       },
       "fieldConfig": {
         "defaults": {
@@ -83,12 +555,12 @@
           "refId": "A"
         }
       ],
-      "description": "Cantidad de invocaciones Lambda por intervalo. Se calcula desde eventos platform.report o REPORT RequestId."
+      "description": "Lambda invocation count per interval, computed from platform.report or REPORT RequestId events."
     },
     {
       "id": 2,
       "type": "timeseries",
-      "title": "Errores por minuto",
+      "title": "Errors per minute",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -98,7 +570,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 0
+        "y": 4
       },
       "fieldConfig": {
         "defaults": {
@@ -146,7 +618,7 @@
           "refId": "A"
         }
       ],
-      "description": "Cantidad de errores por intervalo detectados por patrones en el mensaje, filtrada por Stage (prefijo de función) y Lambda seleccionada (sin depender de detected_level)."
+      "description": "Error count per interval detected from message patterns, filtered by selected stage and lambda."
     },
     {
       "id": 3,
@@ -161,7 +633,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 12
       },
       "fieldConfig": {
         "defaults": {
@@ -169,7 +641,17 @@
           "color": {
             "mode": "palette-classic"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -178,8 +660,12 @@
                 "value": null
               },
               {
+                "color": "yellow",
+                "value": 1
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 3
               }
             ]
           }
@@ -209,12 +695,12 @@
           "refId": "A"
         }
       ],
-      "description": "Porcentaje de error: errores / invocaciones en el intervalo seleccionado, filtrado por Stage (prefijo de función) y Lambda seleccionada."
+      "description": "Error percentage for the selected interval: errors / invocations, filtered by stage and lambda."
     },
     {
       "id": 4,
       "type": "timeseries",
-      "title": "Cold starts por minuto",
+      "title": "Cold starts per minute",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -224,7 +710,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 12
       },
       "fieldConfig": {
         "defaults": {
@@ -272,7 +758,7 @@
           "refId": "A"
         }
       ],
-      "description": "Cantidad de cold starts por intervalo, detectados por platform.initStart o INIT_START."
+      "description": "Cold start count per interval, detected by platform.initStart or INIT_START."
     },
     {
       "id": 5,
@@ -287,7 +773,7 @@
         "h": 8,
         "w": 14,
         "x": 0,
-        "y": 28
+        "y": 34
       },
       "fieldConfig": {
         "defaults": {
@@ -304,12 +790,12 @@
                 "value": null
               },
               {
-                "color": "orange",
-                "value": 500
+                "color": "yellow",
+                "value": 400
               },
               {
                 "color": "red",
-                "value": 1000
+                "value": 800
               }
             ]
           }
@@ -359,7 +845,7 @@
           "refId": "C"
         }
       ],
-      "description": "Latencia de ejecución en ms (p50/p95/p99) extraída de métricas de REPORT/platform.report."
+      "description": "Execution latency in milliseconds (p50/p95/p99) extracted from REPORT/platform.report metrics."
     },
     {
       "id": 6,
@@ -374,7 +860,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 28
+        "y": 34
       },
       "fieldConfig": {
         "defaults": {
@@ -422,7 +908,7 @@
           "refId": "A"
         }
       ],
-      "description": "Máximo de memoria usada (MB) durante el intervalo, extraído de REPORT/platform.report."
+      "description": "Maximum memory used (MB) during the interval, extracted from REPORT/platform.report."
     },
     {
       "id": 10,
@@ -437,7 +923,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 36
+        "y": 42
       },
       "fieldConfig": {
         "defaults": {
@@ -445,7 +931,17 @@
           "color": {
             "mode": "palette-classic"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -454,12 +950,12 @@
                 "value": null
               },
               {
-                "color": "orange",
-                "value": 5
+                "color": "yellow",
+                "value": 2
               },
               {
                 "color": "red",
-                "value": 15
+                "value": 5
               }
             ]
           }
@@ -489,12 +985,12 @@
           "refId": "A"
         }
       ],
-      "description": "Porcentaje de cold starts: cold starts / invocaciones en el intervalo seleccionado, filtrado por Stage y Lambda."
+      "description": "Cold start percentage for the selected interval, filtered by stage and lambda."
     },
     {
       "id": 12,
       "type": "timeseries",
-      "title": "Timeouts por minuto",
+      "title": "Timeouts per minute",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -504,7 +1000,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 36
+        "y": 42
       },
       "fieldConfig": {
         "defaults": {
@@ -512,7 +1008,17 @@
           "color": {
             "mode": "palette-classic"
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "No data"
+                }
+              }
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -521,12 +1027,12 @@
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "yellow",
                 "value": 1
               },
               {
                 "color": "red",
-                "value": 5
+                "value": 3
               }
             ]
           }
@@ -556,22 +1062,22 @@
           "refId": "A"
         }
       ],
-      "description": "Cantidad de timeouts detectados por intervalo, filtrada por Stage y Lambda."
+      "description": "Timeout count per interval, filtered by selected stage and lambda."
     },
     {
       "id": 13,
       "type": "table",
-      "title": "Top Lambdas por errores (tabla)",
+      "title": "Top Lambdas by errors (table)",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
       },
       "pluginVersion": "11.2.0",
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 50
       },
       "fieldConfig": {
         "defaults": {
@@ -591,7 +1097,14 @@
                 "value": 1
               }
             ]
-          }
+          },
+          "links": [
+            {
+              "title": "Open in Explore",
+              "url": "/explore",
+              "targetBlank": false
+            }
+          ]
         },
         "overrides": []
       },
@@ -620,13 +1133,22 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "topk(10, sum by (lambda_clean) (label_replace(count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range]), \"lambda_clean\", \"$1\", \"function\", \"^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$\")))",
-          "legendFormat": "{{lambda_clean}}",
+          "expr": "topk(10, sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])))",
+          "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
         }
       ],
-      "description": "Tabla de lambdas con mayor número de errores en el rango seleccionado, mostrando nombre limpio sin sufijos numéricos largos."
+      "description": "Top 10 lambdas by error count in the selected time range.",
+      "transformations": [
+        {
+          "id": "renameByRegex",
+          "options": {
+            "regex": "^(.*?)(?:-[0-9a-fA-F]{8,}|-[0-9]{6,})?$",
+            "renamePattern": "$1"
+          }
+        }
+      ]
     },
     {
       "id": 7,
@@ -638,10 +1160,10 @@
       },
       "pluginVersion": "11.2.0",
       "gridPos": {
-        "h": 12,
+        "h": 14,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 20
       },
       "fieldConfig": {
         "defaults": {
@@ -654,7 +1176,14 @@
                 "value": null
               }
             ]
-          }
+          },
+          "links": [
+            {
+              "title": "Open in Explore",
+              "url": "/explore",
+              "targetBlank": false
+            }
+          ]
         },
         "overrides": []
       },
@@ -680,12 +1209,12 @@
           "refId": "A"
         }
       ],
-      "description": "Errores en JSON crudo. Filtrado por Stage seleccionado (prefijo de función) y Lambda seleccionada."
+      "description": "Raw error logs, filtered by selected stage and lambda."
     },
     {
       "id": 8,
       "type": "logs",
-      "title": "Life Logs",
+      "title": "Live logs",
       "datasource": {
         "type": "loki",
         "uid": "${datasource}"
@@ -693,45 +1222,6 @@
       "pluginVersion": "11.2.0",
       "gridPos": {
         "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 52
-      },
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": true,
-        "showCommonLabels": false,
-        "showLabels": true,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "loki",
-            "uid": "${datasource}"
-          },
-          "editorMode": "code",
-          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"}",
-          "queryType": "range",
-          "refId": "A"
-        }
-      ],
-      "description": "Streaming en vivo de todos los tipos de logs (sin filtro por nivel o contenido), filtrado por Stage (prefijo de función) y Lambda."
-    },
-    {
-      "id": 9,
-      "type": "logs",
-      "title": "Logs históricos (filtrables por días)",
-      "datasource": {
-        "type": "loki",
-        "uid": "${datasource}"
-      },
-      "pluginVersion": "11.2.0",
-      "gridPos": {
-        "h": 10,
         "w": 24,
         "x": 0,
         "y": 60
@@ -758,8 +1248,47 @@
           "refId": "A"
         }
       ],
+      "description": "Live stream of all log types, filtered by selected stage and lambda."
+    },
+    {
+      "id": 9,
+      "type": "logs",
+      "title": "Historical logs (filterable by days)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "pluginVersion": "11.2.0",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 68
+      },
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": true,
+        "showCommonLabels": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "{job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\", function=~\"${lambda_name:regex}\"}",
+          "queryType": "range",
+          "refId": "A"
+        }
+      ],
       "timeFrom": "${logs_days}",
-      "description": "Histórico de logs filtrable por días usando el selector Logs históricos (días), con filtro por Stage (prefijo de función) y Lambda."
+      "description": "Historical logs filtered by the Historical logs (days) selector, stage and lambda."
     }
   ],
   "refresh": "30s",
@@ -780,7 +1309,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Datasource",
+        "label": "Data source",
         "multi": false,
         "name": "datasource",
         "options": [],
@@ -804,7 +1333,7 @@
         "definition": "label_values({job=~\"lambda|.*lambda.*\"}, function)",
         "hide": 0,
         "includeAll": true,
-        "label": "Stage (prefijo función)",
+        "label": "Stage (function prefix)",
         "multi": false,
         "name": "stage",
         "options": [],
@@ -829,7 +1358,7 @@
         "definition": "label_values({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"}, function)",
         "hide": 0,
         "includeAll": true,
-        "label": "Lambda",
+        "label": "Lambda function",
         "multi": true,
         "name": "lambda_name",
         "options": [],
@@ -848,7 +1377,7 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Logs históricos (días)",
+        "label": "Historical logs (days)",
         "multi": false,
         "name": "logs_days",
         "options": [],
@@ -900,5 +1429,5 @@
   "uid": "tm-lambdas-overview",
   "version": 6,
   "weekStart": "",
-  "description": "Dashboard unificado de Lambdas de TodoMercado. Permite seleccionar stage y función para monitorear invocaciones, errores, error rate, cold starts, cold start rate, timeouts, latencia, memoria y logs."
+  "description": "Unified TodoMercado Lambda dashboard for daily monitoring. Select stage and function to track invocations, errors, error rate, cold starts, cold start rate, timeouts, latency, memory, and logs."
 }
