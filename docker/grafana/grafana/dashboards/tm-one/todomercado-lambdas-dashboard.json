@@ -549,7 +549,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])))",
+          "expr": "topk(100, sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(?i)(\\\\[error\\\\]|runtimeerror|an error occurred|error:|exception|traceback|task timed out|runtime exited|validationexception|accessdeniedexception|\\\\bfailed\\\\b)\" [$__range])))",
           "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
@@ -611,7 +611,7 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sort_desc(sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])))",
+          "expr": "topk(100, sum by (function) (count_over_time({job=~\"lambda|.*lambda.*\", function=~\"^${stage:regex}.*\"} |~ \"(\\\"type\\\":\\\"platform.report\\\"|REPORT RequestId:)\" [$__range])))",
           "legendFormat": "{{function}}",
           "queryType": "instant",
           "refId": "A"
