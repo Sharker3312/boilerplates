@@ -8,9 +8,9 @@ templates:
       {{- if gt (len .Alerts.Firing) 0 -}}
       {{- range .Alerts.Firing }}
       TM ERROR LOG
-      Lambda: {{ .Labels.function }}
-      Errores (5m): {{ .Annotations.count_5m }}
-      Mensaje: {{ .Labels.error_message }}
+      Lambda: {{ or .Labels.function "unknown-function" }}
+      Errors (5m): {{ or .Annotations.count_5m .ValueString }}
+      Message: {{ or .Labels.error_message .Annotations.summary "error without parsed message" }}
       Panel: {{ .Annotations.panel_url }}
 
       {{- end -}}
