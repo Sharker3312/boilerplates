@@ -29,6 +29,13 @@ endpoints:
       - "[STATUS] < 500"
   - name: Cheese - Prod
     group: ERP
+    url: "https://cheese.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] > 0"
+      - "[STATUS] < 500"
+  - name: Cheese - Dev
+    group: ERP
     url: "https://erp-cheese.deepzide.com"
     interval: 1m
     conditions:
