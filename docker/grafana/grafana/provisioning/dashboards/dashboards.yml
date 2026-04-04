@@ -41,6 +41,16 @@ providers:
     options:
       path: /var/lib/grafana/dashboards/tm-one
 
+  - name: "Cheese ERP"
+    orgId: 1
+    folder: "Cheese ERP"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards/cheese-erp
+
   # Legacy cleanup provider: removes old dashboards provisioned years ago under
   # provider name "Lambda Dashboards" that are still locked as provisioned.
   - name: "Lambda Dashboards"
