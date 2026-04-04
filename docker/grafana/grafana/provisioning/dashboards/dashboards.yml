@@ -41,6 +41,16 @@ providers:
     options:
       path: /var/lib/grafana/dashboards/tm-one
 
+  - name: "Apacha"
+    orgId: 1
+    folder: "Apacha"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards/apacha
+
   - name: "Cheese ERP"
     orgId: 1
     folder: "Cheese ERP"
