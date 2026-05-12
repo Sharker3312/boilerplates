@@ -55,6 +55,13 @@ endpoints:
     conditions:
       - "[STATUS] > 0"
       - "[STATUS] < 500"
+  - name: Acuamania - Dev
+    group: ERP
+    url: "https://erp-acuamania-dev.deepzide.com"
+    interval: 1m
+    conditions:
+      - "[STATUS] > 0"
+      - "[STATUS] < 500"
   - name: API - Prod
     group: Todomercado
     url: "https://tks6dy6ll3.execute-api.us-east-1.amazonaws.com/health"
