@@ -86,7 +86,7 @@ endpoints:
       - "[STATUS] == 200"
   - name: Loki
     group: observabilty
-    url: "https://loki.deepzide.com/metrics"
+    url: "https://loki.deepzide.com/ready"
     interval: 1m
     conditions:
       - "[STATUS] == 200"
