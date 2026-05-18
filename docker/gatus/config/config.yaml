@@ -11,103 +11,88 @@ endpoints:
     url: "https://apachabot.deepzide.com/"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Cheese - Bot 
     group: Bot
     url: "https://cheese-bot.deepzide.com/"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Viventi - Bot
     group: Bot
     url: "https://bot.viventi.app/"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Apacha - Staging
     group: ERP
     url: "https://erp-apacha-dev.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Dermagroup - Prod
     group: ERP
     url: "https://erp-dermagroup.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Dermagroup - Dev
     group: ERP
     url: "https://erp-dermagroup-dev.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Cheese - Prod
     group: ERP
     url: "https://erp-cheese.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Cheese - Dev
     group: ERP
     url: "https://erp-cheese-dev.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Acuamania - Prod
     group: ERP
     url: "https://erp-acuamania.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Acuamania - Dev
     group: ERP
     url: "https://erp-acuamania-dev.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: API - Prod
     group: Todomercado
     url: "https://tks6dy6ll3.execute-api.us-east-1.amazonaws.com/health"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: API - Dev
     group: Todomercado
     url: "https://tks6dy6ll3.execute-api.us-east-1.amazonaws.com/health"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Alloy
     group: observabilty
     url: "https://alloy.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Loki
     group: observabilty
     url: "https://loki.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
   - name: Grafana
     group: observabilty
     url: "https://grafana.deepzide.com"
     interval: 1m
     conditions:
-      - "[STATUS] > 0"
-      - "[STATUS] < 500"
+      - "[STATUS] == 200"
