@@ -13,6 +13,20 @@ endpoints:
     conditions:
       - "[STATUS] > 0"
       - "[STATUS] < 500"
+  - name: BOT - Cheese
+    group: Bot
+    url: "https://cheese-bot.deepzide.com/"
+    interval: 1m
+    conditions:
+      - "[STATUS] > 0"
+      - "[STATUS] < 500"
+  - name: BOT - Viventi
+    group: Bot
+    url: "https://bot.viventi.app/"
+    interval: 1m
+    conditions:
+      - "[STATUS] > 0"
+      - "[STATUS] < 500"
   - name: Apacha - Staging
     group: ERP
     url: "https://erp-apacha-dev.deepzide.com"
