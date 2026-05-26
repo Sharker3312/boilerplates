@@ -33,7 +33,7 @@
         "y": 0
       },
       "options": {
-        "content": "# \ud83e\uddea Pruebas de Rendimiento - TodoMercado API\n\nEste tablero muestra el comportamiento de la API bajo diferentes niveles de carga.\nLos colores indican: \ud83d\udfe2 Saludable | \ud83d\udfe1 Precauci\u00f3n | \ud83d\udd34 Cr\u00edtico\n\n**Test: $test_name**\n\n| Test | Usuarios | Tipo | Descripci\u00f3n |\n|------|----------|------|-------------|\n| 01_smoke | 1 VU | \ud83e\uddea Smoke | Verificar endpoints b\u00e1sicos |\n| 02_load_50 | **50 VUs** | \ud83d\udea6 Load | Carga media sostenida |\n| 03_load_200 | 200 VUs | \ud83d\udcc8 Load | Carga alta sostenida |\n| 04_stress_500 | 500 VUs | \ud83d\udd25 Stress | Punto de quiebre |\n| 05_spike | Spike | \ud83d\udca5 Spike | Picos repentinos |\n| 06_soak_200 | 200 VUs | \ud83d\udca7 Soak | Resistencia prolongada |\n\n**Percentil: $percentile**",
+          "content": "# \ud83e\uddea Pruebas de Rendimiento - TodoMercado API\n\nEste tablero muestra el comportamiento de la API bajo diferentes niveles de carga.\nLos colores indican: \ud83d\udfe2 Saludable | \ud83d\udfe1 Precauci\u00f3n | \ud83d\udd34 Cr\u00edtico\n\n**Test: $test_name | Latencia: P99**\n\n| Test | Usuarios | Tipo | Descripci\u00f3n |\n|------|----------|------|-------------|\n| 01_smoke | 1 VU | \ud83e\uddea Smoke | Verificar endpoints b\u00e1sicos |\n| 02_load_50 | **50 VUs** | \ud83d\udea6 Load | Carga media sostenida |\n| 03_load_200 | 200 VUs | \ud83d\udcc8 Load | Carga alta sostenida |\n| 04_stress_500 | 500 VUs | \ud83d\udd25 Stress | Punto de quiebre |\n| 05_spike | Spike | \ud83d\udca5 Spike | Picos repentinos |\n| 06_soak_200 | 200 VUs | \ud83d\udca7 Soak | Resistencia prolongada |",
         "mode": "markdown"
       },
       "pluginVersion": "13.1.0",
@@ -168,7 +168,7 @@
     {
       "id": 3,
       "type": "gauge",
-      "title": "Velocidad (P95)",
+      "title": "Latencia P99",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -222,9 +222,9 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile($percentile, sum(k6_http_req_duration_seconds{test=\"$test_name\"}))",
+          "expr": "max(k6_http_req_duration_p99{test=\"$test_name\"})",
           "refId": "A",
-          "legendFormat": "p95"
+          "legendFormat": "P99 (peor caso)"
         }
       ]
     },
@@ -425,6 +425,18 @@
                 "value": "hidden"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "P99 max .*"
+            },
+            "properties": [
+              {
+                "id": "custom.axisPlacement",
+                "value": "hidden"
+              }
+            ]
           }
         ]
       },
@@ -444,19 +456,70 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "avg by(scenario) (k6_http_req_duration_p99{test=\"$test_name\", scenario=~\"$scenario\"})",
           "refId": "A",
-          "legendFormat": "Velocidad promedio"
+          "legendFormat": "P99 {{scenario}}"
         },
         {
-          "expr": "histogram_quantile($percentile, sum(k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "max by(scenario) (k6_http_req_duration_p99{test=\"$test_name\", scenario=~\"$scenario\"})",
           "refId": "B",
-          "legendFormat": "Velocidad P95 (el 5% m\u00e1s lento)"
+          "legendFormat": "P99 max {{scenario}}"
         },
         {
           "expr": "k6_vus",
           "refId": "C",
           "legendFormat": "Usuarios activos"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "timeseries",
+      "title": "¿Dónde está el cuello de botella? (Latencia por funcionalidad)",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "pluginVersion": "13.1.0",
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "fillOpacity": 10,
+            "pointSize": 5,
+            "showPoints": "auto",
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        },
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "calcs": [
+            "last",
+            "max"
+          ]
+        }
+      },
+      "targets": [
+        {
+          "expr": "topk(10, max by(endpoint) (k6_http_req_duration_p99{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "refId": "A",
+          "legendFormat": "{{endpoint}}"
         }
       ]
     },
@@ -717,35 +780,19 @@
       {
         "name": "percentile",
         "type": "custom",
-        "datasource": null,
-        "query": "0.50 : P50 (mediana),0.90 : P90,0.95 : P95,0.99 : P99 (cola larga)",
+        "query": "P99 : P99 (cola larga)",
         "current": {
-          "text": "P95",
-          "value": "0.95"
+          "text": "P99 (cola larga)",
+          "value": "P99 (cola larga)"
         },
         "options": [
           {
-            "text": "P50 (mediana)",
-            "value": "0.50",
-            "selected": false
-          },
-          {
-            "text": "P90",
-            "value": "0.90",
-            "selected": false
-          },
-          {
-            "text": "P95",
-            "value": "0.95",
-            "selected": true
-          },
-          {
             "text": "P99 (cola larga)",
-            "value": "0.99",
-            "selected": false
+            "value": "P99 (cola larga)",
+            "selected": true
           }
         ],
-        "label": "Percentil",
+        "label": "Métrica latencia",
         "hide": 0,
         "includeAll": false,
         "multi": false,
@@ -761,5 +808,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 17
+  "version": 18
 }
