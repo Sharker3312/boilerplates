@@ -33,7 +33,7 @@
         "y": 0
       },
       "options": {
-          "content": "# \ud83e\uddea Pruebas de Rendimiento - TodoMercado API\n\nEste tablero muestra el comportamiento de la API bajo diferentes niveles de carga.\nLos colores indican: \ud83d\udfe2 Saludable | \ud83d\udfe1 Precauci\u00f3n | \ud83d\udd34 Cr\u00edtico\n\n**Test: $test_name | Latencia: P99**\n\n| Test | Usuarios | Tipo | Descripci\u00f3n |\n|------|----------|------|-------------|\n| 01_smoke | 1 VU | \ud83e\uddea Smoke | Verificar endpoints b\u00e1sicos |\n| 02_load_50 | **50 VUs** | \ud83d\udea6 Load | Carga media sostenida |\n| 03_load_200 | 200 VUs | \ud83d\udcc8 Load | Carga alta sostenida |\n| 04_stress_500 | 500 VUs | \ud83d\udd25 Stress | Punto de quiebre |\n| 05_spike | Spike | \ud83d\udca5 Spike | Picos repentinos |\n| 06_soak_200 | 200 VUs | \ud83d\udca7 Soak | Resistencia prolongada |",
+        "content": "# 🧪 Pruebas de Rendimiento - TodoMercado API\n\nEste tablero muestra el comportamiento de la API bajo diferentes niveles de carga.\nLos colores indican: 🟢 Saludable | 🟡 Precaución | 🔴 Crítico\n\n**Test: $test_name | Latencia: P99**\n\n| Test | Usuarios | Tipo | Descripción |\n|------|----------|------|-------------|\n| 01_smoke | 1 VU | 🧪 Smoke | Verificar endpoints básicos |\n| 02_load_50 | **50 VUs** | 🚦 Load | Carga media sostenida |\n| 03_load_200 | 200 VUs | 📈 Load | Carga alta sostenida |\n| 04_stress_500 | 500 VUs | 🔥 Stress | Punto de quiebre |\n| 05_spike | Spike | 💥 Spike | Picos repentinos |\n| 06_soak_200 | 200 VUs | 💧 Soak | Resistencia prolongada |",
         "mode": "markdown"
       },
       "pluginVersion": "13.1.0",
@@ -296,7 +296,7 @@
     {
       "id": 10,
       "type": "timeseries",
-      "title": "\u00bfCu\u00e1ntos usuarios soporta la API?",
+      "title": "¿Cuántos usuarios soporta la API?",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -385,7 +385,7 @@
     {
       "id": 11,
       "type": "timeseries",
-      "title": "\u00bfQu\u00e9 tan r\u00e1pido responde bajo carga?",
+      "title": "¿Qué tan rápido responde bajo carga?",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -524,60 +524,9 @@
       ]
     },
     {
-      "id": 12,
-      "type": "timeseries",
-      "title": "\u00bfD\u00f3nde est\u00e1 el cuello de botella? (Latencia por funcionalidad)",
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus"
-      },
-      "pluginVersion": "13.1.0",
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 23
-      },
-      "fieldConfig": {
-        "defaults": {
-          "unit": "s",
-          "custom": {
-            "drawStyle": "line",
-            "lineInterpolation": "smooth",
-            "fillOpacity": 10,
-            "pointSize": 5,
-            "showPoints": "auto",
-            "spanNulls": false
-          }
-        },
-        "overrides": []
-      },
-      "options": {
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        },
-        "legend": {
-          "displayMode": "table",
-          "placement": "right",
-          "calcs": [
-            "last",
-            "max"
-          ]
-        }
-      },
-      "targets": [
-        {
-          "expr": "histogram_quantile($percentile, sum by (endpoint) (k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
-          "refId": "A",
-          "legendFormat": "{{endpoint}}"
-        }
-      ]
-    },
-    {
       "id": 13,
       "type": "timeseries",
-      "title": "\u00bfCu\u00e1ntos errores ocurren bajo carga?",
+      "title": "¿Cuántos errores ocurren bajo carga?",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -643,7 +592,7 @@
     {
       "id": 20,
       "type": "table",
-      "title": "\ud83d\udd0d Detalle de Errores (para equipo t\u00e9cnico)",
+      "title": "🔍 Detalle de Errores (para equipo técnico)",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
@@ -742,12 +691,31 @@
           "value": "01_smoke"
         },
         "options": [
-          {"text": "01_smoke", "value": "01_smoke", "selected": true},
-          {"text": "02_load_50", "value": "02_load_50"},
-          {"text": "03_load_200", "value": "03_load_200"},
-          {"text": "04_stress_500", "value": "04_stress_500"},
-          {"text": "05_spike", "value": "05_spike"},
-          {"text": "06_soak_200", "value": "06_soak_200"}
+          {
+            "text": "01_smoke",
+            "value": "01_smoke",
+            "selected": true
+          },
+          {
+            "text": "02_load_50",
+            "value": "02_load_50"
+          },
+          {
+            "text": "03_load_200",
+            "value": "03_load_200"
+          },
+          {
+            "text": "04_stress_500",
+            "value": "04_stress_500"
+          },
+          {
+            "text": "05_spike",
+            "value": "05_spike"
+          },
+          {
+            "text": "06_soak_200",
+            "value": "06_soak_200"
+          }
         ],
         "label": "Prueba",
         "hide": 0,
@@ -764,11 +732,27 @@
           "value": "$__all"
         },
         "options": [
-          {"text": "All", "value": "$__all", "selected": true},
-          {"text": "default", "value": "default"},
-          {"text": "authenticated_browse", "value": "authenticated_browse"},
-          {"text": "public_browse", "value": "public_browse"},
-          {"text": "seller_actions", "value": "seller_actions"}
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": true
+          },
+          {
+            "text": "default",
+            "value": "default"
+          },
+          {
+            "text": "authenticated_browse",
+            "value": "authenticated_browse"
+          },
+          {
+            "text": "public_browse",
+            "value": "public_browse"
+          },
+          {
+            "text": "seller_actions",
+            "value": "seller_actions"
+          }
         ],
         "label": "Escenario",
         "hide": 0,
@@ -808,5 +792,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 18
+  "version": 19
 }
