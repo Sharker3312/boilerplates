@@ -678,17 +678,12 @@
           "uid": "prometheus"
         },
         "definition": "label_values(k6_http_reqs_total, test)",
-        "query": {
-          "qryType": 1,
-          "refId": "PrometheusVariableQueryEditor-VariableQuery",
-          "label": "test",
-          "metric": "k6_http_reqs_total"
-        },
+        "query": "label_values(k6_http_reqs_total, test)",
         "refresh": 2,
         "sort": 1,
         "current": {
-          "text": "02_load_50",
-          "value": "02_load_50"
+          "text": "01_smoke",
+          "value": "01_smoke"
         },
         "label": "Prueba",
         "hide": 0,
@@ -706,12 +701,7 @@
           "uid": "prometheus"
         },
         "definition": "label_values(k6_http_reqs_total, scenario)",
-        "query": {
-          "qryType": 1,
-          "refId": "PrometheusVariableQueryEditor-VariableQuery",
-          "label": "scenario",
-          "metric": "k6_http_reqs_total"
-        },
+        "query": "label_values(k6_http_reqs_total, scenario)",
         "refresh": 2,
         "sort": 1,
         "current": {
@@ -774,5 +764,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 14
+  "version": 15
 }
