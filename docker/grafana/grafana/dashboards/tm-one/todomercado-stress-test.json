@@ -355,7 +355,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval])) * 100",
+          "expr": "sum(increase(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\"}[$__range])) / sum(increase(k6_http_reqs_total{test=\"$test_name\"}[$__range])) * 100",
           "refId": "A",
           "legendFormat": "% Errores"
         }
@@ -447,5 +447,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 1
+  "version": 6
 }
