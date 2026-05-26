@@ -672,49 +672,46 @@
     "list": [
       {
         "name": "test_name",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
-        "definition": "label_values(k6_http_reqs_total, test)",
-        "query": "label_values(k6_http_reqs_total, test)",
-        "refresh": 2,
-        "sort": 1,
+        "type": "custom",
+        "query": "01_smoke,02_load_50,03_load_200,04_stress_500,05_spike,06_soak_200",
         "current": {
           "text": "01_smoke",
           "value": "01_smoke"
         },
+        "options": [
+          {"text": "01_smoke", "value": "01_smoke", "selected": true},
+          {"text": "02_load_50", "value": "02_load_50"},
+          {"text": "03_load_200", "value": "03_load_200"},
+          {"text": "04_stress_500", "value": "04_stress_500"},
+          {"text": "05_spike", "value": "05_spike"},
+          {"text": "06_soak_200", "value": "06_soak_200"}
+        ],
         "label": "Prueba",
         "hide": 0,
         "includeAll": false,
         "multi": false,
-        "options": [],
-        "regex": "",
         "skipUrlSync": false
       },
       {
         "name": "scenario",
-        "type": "query",
-        "datasource": {
-          "type": "prometheus",
-          "uid": "prometheus"
-        },
-        "definition": "label_values(k6_http_reqs_total, scenario)",
-        "query": "label_values(k6_http_reqs_total, scenario)",
-        "refresh": 2,
-        "sort": 1,
+        "type": "custom",
+        "query": "All : $__all,default,authenticated_browse,public_browse,seller_actions",
         "current": {
           "text": "All",
           "value": "$__all"
         },
+        "options": [
+          {"text": "All", "value": "$__all", "selected": true},
+          {"text": "default", "value": "default"},
+          {"text": "authenticated_browse", "value": "authenticated_browse"},
+          {"text": "public_browse", "value": "public_browse"},
+          {"text": "seller_actions", "value": "seller_actions"}
+        ],
         "label": "Escenario",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "allValue": ".+",
-        "options": [],
-        "regex": "",
         "skipUrlSync": false
       },
       {
@@ -764,5 +761,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 15
+  "version": 16
 }
