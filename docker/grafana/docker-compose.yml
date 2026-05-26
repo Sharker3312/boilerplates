@@ -1,6 +1,6 @@
 services:
   prometheus:
-    image: prom/prometheus:v2.54.1
+    image: prom/prometheus:v3.11.3
     container_name: prometheus
     restart: unless-stopped
     command:
@@ -14,10 +14,9 @@ services:
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
-    # ...existing code...
 
   loki:
-    image: grafana/loki:3.1.0
+    image: grafana/loki:3.7.2
     container_name: loki
     restart: unless-stopped
     command:
@@ -28,7 +27,6 @@ services:
     volumes:
       - ./loki/config.yml:/etc/loki/config.yml:ro
       - loki_data:/loki
-    # ...existing code...
 
   alloy:
     image: grafana/alloy:latest
@@ -48,10 +46,9 @@ services:
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       AWS_REGION: us-east-1
-    # ...existing code...
 
   tempo:
-    image: grafana/tempo:2.5.0
+    image: grafana/tempo:latest
     container_name: tempo
     restart: unless-stopped
     command:
@@ -61,10 +58,9 @@ services:
     volumes:
       - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro
       - tempo_data:/var/tempo
-    # ...existing code...
 
   grafana:
-    image: grafana/grafana:11.2.0
+    image: grafana/grafana:13.1.0
     container_name: grafana
     restart: unless-stopped
     ports:
@@ -73,6 +69,10 @@ services:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_FEATURE_TOGGLES_ENABLE=traceToMetrics,traceToProfiles,cloudWatchMetricsCrossAccountQuery,managedDashboardsExport
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/var/lib/grafana/dashboards/tm-one/todomercado-stress-test.json
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_SERVER_ROOT_URL=https://grafana.deepzide.com
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning:/etc/grafana/provisioning:ro
@@ -81,11 +81,9 @@ services:
       - prometheus
       - loki
       - tempo
-    # ...existing code...
 
 volumes:
   prometheus_data:
   loki_data:
   tempo_data:
   grafana_data:
-  # ...existing code...

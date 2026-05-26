@@ -677,12 +677,12 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "",
+        "definition": "label_values(k6_http_reqs_total, test)",
         "query": {
           "qryType": 1,
+          "refId": "PrometheusVariableQueryEditor-VariableQuery",
           "label": "test",
-          "metric": "k6_http_reqs_total",
-          "type": "datasource"
+          "metric": "k6_http_reqs_total"
         },
         "refresh": 2,
         "sort": 1,
@@ -705,14 +705,14 @@
           "type": "prometheus",
           "uid": "prometheus"
         },
-        "definition": "",
+        "definition": "label_values(k6_http_reqs_total, scenario)",
         "query": {
           "qryType": 1,
+          "refId": "PrometheusVariableQueryEditor-VariableQuery",
           "label": "scenario",
-          "metric": "k6_http_reqs_total",
-          "type": "datasource"
+          "metric": "k6_http_reqs_total"
         },
-        "refresh": 1,
+        "refresh": 2,
         "sort": 1,
         "current": {
           "text": "All",
@@ -774,5 +774,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 11
+  "version": 12
 }
