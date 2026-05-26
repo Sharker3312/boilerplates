@@ -222,7 +222,7 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile($percentile, sum by (le) (k6_http_req_duration_seconds{test=\"$test_name\"}))",
+          "expr": "histogram_quantile($percentile, sum(k6_http_req_duration_seconds{test=\"$test_name\"}))",
           "refId": "A",
           "legendFormat": "p95"
         }
@@ -444,12 +444,12 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum by (le) (k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "histogram_quantile(0.50, sum(k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
           "refId": "A",
           "legendFormat": "Velocidad promedio"
         },
         {
-          "expr": "histogram_quantile($percentile, sum by (le) (k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "histogram_quantile($percentile, sum(k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
           "refId": "B",
           "legendFormat": "Velocidad P95 (el 5% m\u00e1s lento)"
         },
@@ -505,7 +505,7 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile($percentile, sum by (le, endpoint) (k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "histogram_quantile($percentile, sum by (endpoint) (k6_http_req_duration_seconds{test=\"$test_name\", scenario=~\"$scenario\"}))",
           "refId": "A",
           "legendFormat": "{{endpoint}}"
         }
@@ -761,5 +761,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 16
+  "version": 17
 }
