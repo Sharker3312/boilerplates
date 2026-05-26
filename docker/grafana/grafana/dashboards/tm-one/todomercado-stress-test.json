@@ -731,10 +731,7 @@
         "name": "percentile",
         "type": "custom",
         "datasource": null,
-        "query": {
-          "type": "datasource",
-          "query": "0.50 : P50 (mediana),0.90 : P90,0.95 : P95,0.99 : P99 (cola larga)"
-        },
+        "query": "0.50 : P50 (mediana),0.90 : P90,0.95 : P95,0.99 : P99 (cola larga)",
         "current": {
           "text": "P95",
           "value": "0.95"
