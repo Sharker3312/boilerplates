@@ -726,7 +726,7 @@
       {
         "name": "scenario",
         "type": "custom",
-        "query": "All : $__all,default,authenticated_browse,public_browse,seller_actions",
+        "query": "All : $__all,default,authenticated_browse,public_browse,seller_actions,browse_heavy,auth_write_mixed,auction_bidding,stress_all,spike,soak_browse,soak_auth,soak_write",
         "current": {
           "text": "All",
           "value": "$__all"
@@ -752,6 +752,38 @@
           {
             "text": "seller_actions",
             "value": "seller_actions"
+          },
+          {
+            "text": "browse_heavy",
+            "value": "browse_heavy"
+          },
+          {
+            "text": "auth_write_mixed",
+            "value": "auth_write_mixed"
+          },
+          {
+            "text": "auction_bidding",
+            "value": "auction_bidding"
+          },
+          {
+            "text": "stress_all",
+            "value": "stress_all"
+          },
+          {
+            "text": "spike",
+            "value": "spike"
+          },
+          {
+            "text": "soak_browse",
+            "value": "soak_browse"
+          },
+          {
+            "text": "soak_auth",
+            "value": "soak_auth"
+          },
+          {
+            "text": "soak_write",
+            "value": "soak_write"
           }
         ],
         "label": "Escenario",
@@ -792,5 +824,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 19
+  "version": 20
 }
