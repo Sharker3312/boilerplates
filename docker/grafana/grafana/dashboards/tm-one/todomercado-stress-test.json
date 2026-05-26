@@ -376,7 +376,7 @@
           "legendFormat": "Usuarios activos"
         },
         {
-          "expr": "sum(rate(k6_http_reqs_total{test=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval]))",
+          "expr": "sum(rate(k6_http_reqs_total{test=\"$test_name\", scenario=~\"$scenario\"}[$__range]))",
           "refId": "B",
           "legendFormat": "Requests/segundo"
         }
@@ -444,12 +444,12 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile(0.50, sum(rate(k6_http_req_duration_milliseconds_bucket{test=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval])) by (le)) / 1000",
+          "expr": "histogram_quantile(0.50, sum(rate(k6_http_req_duration_milliseconds_bucket{test=\"$test_name\", scenario=~\"$scenario\"}[$__range])) by (le)) / 1000",
           "refId": "A",
           "legendFormat": "Velocidad promedio"
         },
         {
-          "expr": "histogram_quantile($percentile, sum(rate(k6_http_req_duration_milliseconds_bucket{test=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval])) by (le)) / 1000",
+          "expr": "histogram_quantile($percentile, sum(rate(k6_http_req_duration_milliseconds_bucket{test=\"$test_name\", scenario=~\"$scenario\"}[$__range])) by (le)) / 1000",
           "refId": "B",
           "legendFormat": "Velocidad P95 (el 5% m\u00e1s lento)"
         },
@@ -505,7 +505,7 @@
       },
       "targets": [
         {
-          "expr": "histogram_quantile($percentile, sum(rate(k6_http_req_duration_milliseconds_bucket{test=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval])) by (le, endpoint)) / 1000",
+          "expr": "histogram_quantile($percentile, sum(rate(k6_http_req_duration_milliseconds_bucket{test=\"$test_name\", scenario=~\"$scenario\"}[$__range])) by (le, endpoint)) / 1000",
           "refId": "A",
           "legendFormat": "{{endpoint}}"
         }
@@ -571,7 +571,7 @@
       },
       "targets": [
         {
-          "expr": "sum(increase(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\", scenario=~\"$scenario\"}[$__rate_interval])) / sum(increase(k6_http_reqs_total{test=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval])) * 100",
+          "expr": "sum(increase(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\", scenario=~\"$scenario\"}[$__range])) / sum(increase(k6_http_reqs_total{test=\"$test_name\", scenario=~\"$scenario\"}[$__range])) * 100",
           "refId": "A",
           "legendFormat": "% Errores"
         }
@@ -774,5 +774,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 9
+  "version": 10
 }
