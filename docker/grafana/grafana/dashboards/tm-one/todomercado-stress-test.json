@@ -63,7 +63,7 @@
       },
       "targets": [
         {
-          "expr": "(1 - sum(rate(k6_http_req_failed_total{test=\"$test_name\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval]))) * 100",
+          "expr": "(1 - sum(rate(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval]))) * 100",
           "refId": "A",
           "legendFormat": "disponibilidad"
         }
@@ -101,7 +101,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval])) * 100",
+          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval])) * 100",
           "refId": "A",
           "legendFormat": "errores"
         }
@@ -355,7 +355,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval])) * 100",
+          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\"}[$__rate_interval])) / sum(rate(k6_http_reqs_total{test=\"$test_name\"}[$__rate_interval])) * 100",
           "refId": "A",
           "legendFormat": "% Errores"
         }
@@ -388,7 +388,7 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\"}[$__rate_interval])) by (endpoint, status)",
+          "expr": "sum(rate(k6_http_req_failed_total{test=\"$test_name\", condition=\"nonzero\"}[$__rate_interval])) by (endpoint, status)",
           "format": "table",
           "instant": true,
           "refId": "A",
