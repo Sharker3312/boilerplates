@@ -222,7 +222,7 @@
       },
       "targets": [
         {
-          "expr": "max(k6_http_req_duration_p99{test=\"$test_name\"})",
+          "expr": "max(max_over_time(k6_http_req_duration_p99{test=\"$test_name\"}[$__range]))",
           "refId": "A",
           "legendFormat": "P99 (peor caso)"
         }
@@ -597,7 +597,7 @@
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Línea de tiempo por funcionalidad. Verde = funcionando, Rojo = con errores.",
+      "description": "Línea de tiempo por funcionalidad. Verde = funcionando, Rojo = con errores, Gris = sin datos (no se estaba ejecutando el test).",
       "pluginVersion": "13.1.0",
       "gridPos": {
         "h": 8,
@@ -613,8 +613,9 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "red", "value": 0.001 }
+              { "color": "transparent", "value": null },
+              { "color": "green", "value": 0 },
+              { "color": "red", "value": 1 }
             ]
           },
           "mappings": [
@@ -622,43 +623,37 @@
               "type": "special",
               "options": {
                 "match": "null",
-                "result": { "text": "Sin datos", "color": "gray" }
+                "result": { "text": " ", "index": 0 }
               }
             },
             {
-              "type": "range",
+              "type": "value",
               "options": {
-                "from": 0,
-                "to": 0,
-                "result": { "text": "OK", "color": "green" }
-              }
-            },
-            {
-              "type": "range",
-              "options": {
-                "from": 0.001,
-                "to": 100000,
-                "result": { "text": "Con errores", "color": "red" }
+                "0": { "text": "OK", "index": 1 }
               }
             }
-          ]
+          ],
+          "custom": {
+            "fillOpacity": 60
+          }
         },
         "overrides": []
       },
       "options": {
         "showValue": "auto",
         "mergeValues": true,
-        "tooltip": { "mode": "single" }
+        "tooltip": { "mode": "single" },
+        "colWidth": 0.9
       },
       "targets": [
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))", "refId": "A", "legendFormat": "Productos" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))", "refId": "B", "legendFormat": "Shows" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))", "refId": "C", "legendFormat": "Perfil" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))", "refId": "D", "legendFormat": "Direcciones" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))", "refId": "E", "legendFormat": "Notificaciones" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))", "refId": "F", "legendFormat": "Pedidos" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))", "refId": "G", "legendFormat": "Vendedores" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))", "refId": "H", "legendFormat": "Autenticación" }
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))), 0)", "refId": "A", "legendFormat": "Productos" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))), 0)", "refId": "B", "legendFormat": "Shows" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))), 0)", "refId": "C", "legendFormat": "Perfil" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))), 0)", "refId": "D", "legendFormat": "Direcciones" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))), 0)", "refId": "E", "legendFormat": "Notificaciones" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))), 0)", "refId": "F", "legendFormat": "Pedidos" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))), 0)", "refId": "G", "legendFormat": "Vendedores" },
+        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))), 0)", "refId": "H", "legendFormat": "Autenticación" }
       ]
     },
     {
@@ -870,5 +865,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 22
+  "version": 23
 }
