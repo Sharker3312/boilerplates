@@ -758,7 +758,7 @@
     }
   ],
   "refresh": "10s",
-  "schemaVersion": 43,
+  "schemaVersion": 39,
   "tags": [
     "k6",
     "stress-test",
