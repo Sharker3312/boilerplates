@@ -591,170 +591,130 @@
     },
     {
       "id": 20,
-      "type": "table",
-      "title": "Resumen de Errores",
+      "type": "state-timeline",
+      "title": "¿Cuándo dejó de funcionar?",
       "datasource": {
         "type": "prometheus",
         "uid": "prometheus"
       },
-      "description": "Lista de errores encontrados durante la prueba. La columna 'Causa probable' explica por qué ocurrió cada error.",
+      "description": "Línea de tiempo por funcionalidad. Verde = funcionando, Rojo = con errores.",
       "pluginVersion": "13.1.0",
       "gridPos": {
-        "h": 10,
+        "h": 8,
         "w": 24,
         "x": 0,
         "y": 33
       },
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "align": "auto",
-            "inspect": false,
-            "filterable": true
-          },
           "color": {
             "mode": "thresholds"
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Cantidad"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "short"
-              },
-              {
-                "id": "decimals",
-                "value": 0
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    { "color": "green", "value": null },
-                    { "color": "yellow", "value": 10 },
-                    { "color": "red", "value": 100 }
-                  ]
-                }
-              },
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-background",
-                  "mode": "basic"
-                }
-              }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "red", "value": 0.001 }
             ]
           },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Tipo de Error"
-            },
-            "properties": [
-              {
-                "id": "custom.cellOptions",
-                "value": {
-                  "type": "color-background",
-                  "mode": "basic"
-                }
-              },
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    { "color": "yellow", "value": null },
-                    { "color": "red", "value": null },
-                    { "color": "dark-red", "value": null }
-                  ]
-                }
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "title": "Ver detalle en CloudWatch",
-                    "url": "https://us-east-1.console.aws.amazon.com/cloudwatch/home?region=us-east-1#logsV2:log-groups/log-group/$252Faws$252Flambda$252Fdev-todomercado-ApiStack-ApiLambda91D2282D-xDDMt4S8ZcKN"
-                  }
-                ]
+          "mappings": [
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": { "text": "Sin datos", "color": "gray" }
               }
-            ]
-          }
-        ]
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 0,
+                "to": 0,
+                "result": { "text": "OK", "color": "green" }
+              }
+            },
+            {
+              "type": "range",
+              "options": {
+                "from": 0.001,
+                "to": 100000,
+                "result": { "text": "Con errores", "color": "red" }
+              }
+            }
+          ]
+        },
+        "overrides": []
       },
       "options": {
-        "showHeader": true,
-        "footer": {
-          "show": true,
-          "reducer": ["sum"],
-          "countFields": "Cantidad"
-        },
-        "sortBy": [
-          { "displayName": "Cantidad", "desc": true }
-        ]
+        "showValue": "auto",
+        "mergeValues": true,
+        "tooltip": { "mode": "single" }
       },
-      "transformations": [
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "name",
-            "rename": "Endpoint"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "Value",
-            "rename": "Cantidad"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "status",
-            "rename": "Tipo de Error"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
-            "regex": "https://knjxe7fzgf.execute-api.us-east-1.amazonaws.com",
-            "renamePattern": true
-          }
-        }
-      ],
       "targets": [
-        {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\"}[$__range])) by (name, status)",
-          "format": "table",
-          "instant": true,
-          "refId": "A",
-          "legendFormat": ""
-        }
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))", "refId": "A", "legendFormat": "Productos" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))", "refId": "B", "legendFormat": "Shows" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))", "refId": "C", "legendFormat": "Perfil" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))", "refId": "D", "legendFormat": "Direcciones" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))", "refId": "E", "legendFormat": "Notificaciones" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))", "refId": "F", "legendFormat": "Pedidos" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))", "refId": "G", "legendFormat": "Vendedores" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))", "refId": "H", "legendFormat": "Autenticación" }
       ]
     },
     {
       "id": 21,
-      "type": "text",
-      "title": "",
+      "type": "bargauge",
+      "title": "¿Qué funcionalidades fallaron más?",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus"
+      },
+      "description": "Cantidad total de errores por funcionalidad. Rojo = problema grave, amarillo = problema menor, verde = sin errores.",
+      "pluginVersion": "13.1.0",
       "gridPos": {
-        "h": 5,
+        "h": 10,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 41
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 10 },
+              { "color": "red", "value": 100 }
+            ]
+          }
+        },
+        "overrides": []
       },
       "options": {
-        "content": "### Guía de Errores\n\n| Código | Significado | Causa probable | Acción recomendada |\n|--------|-------------|----------------|-------------------|\n| **400** | Solicitud incorrecta | El test envió datos mal formados (ej: credenciales vacías) | Revisar configuración del test |\n| **401** | No autenticado | Token expirado o inválido | Verificar credenciales Cognito |\n| **403** | Prohibido | El endpoint requiere permisos especiales (ej: rol admin) | Comportamiento esperado si no es admin |\n| **422** | Datos inválidos | El payload no cumple validación (campo faltante, tipo incorrecto) | Corregir datos de entrada del test |\n| **503** | Servicio no disponible | **La Lambda no puede procesar más requests** (límite de concurrencia = 10) | Solicitar aumento de cuota AWS |",
-        "mode": "markdown"
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "sort": "desc",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        }
       },
-      "pluginVersion": "13.1.0",
-      "transparent": true
+      "targets": [
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[$__range]))", "refId": "A", "legendFormat": "Productos" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[$__range]))", "refId": "B", "legendFormat": "Shows" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[$__range]))", "refId": "C", "legendFormat": "Perfil" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[$__range]))", "refId": "D", "legendFormat": "Direcciones" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[$__range]))", "refId": "E", "legendFormat": "Notificaciones" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[$__range]))", "refId": "F", "legendFormat": "Pedidos" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[$__range]))", "refId": "G", "legendFormat": "Vendedores" },
+        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[$__range]))", "refId": "H", "legendFormat": "Autenticación" }
+      ]
     }
   ],
   "refresh": "10s",
@@ -910,5 +870,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 21
+  "version": 22
 }
