@@ -613,9 +613,18 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "transparent", "value": null },
-              { "color": "green", "value": 0 },
-              { "color": "red", "value": 1 }
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
             ]
           },
           "mappings": [
@@ -623,13 +632,19 @@
               "type": "special",
               "options": {
                 "match": "null",
-                "result": { "text": " ", "index": 0 }
+                "result": {
+                  "text": " ",
+                  "index": 0
+                }
               }
             },
             {
               "type": "value",
               "options": {
-                "0": { "text": "OK", "index": 1 }
+                "0": {
+                  "text": "OK",
+                  "index": 1
+                }
               }
             }
           ],
@@ -642,18 +657,52 @@
       "options": {
         "showValue": "auto",
         "mergeValues": true,
-        "tooltip": { "mode": "single" },
+        "tooltip": {
+          "mode": "single"
+        },
         "colWidth": 0.9
       },
       "targets": [
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))), 0)", "refId": "A", "legendFormat": "Productos" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))), 0)", "refId": "B", "legendFormat": "Shows" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))), 0)", "refId": "C", "legendFormat": "Perfil" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))), 0)", "refId": "D", "legendFormat": "Direcciones" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))), 0)", "refId": "E", "legendFormat": "Notificaciones" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))), 0)", "refId": "F", "legendFormat": "Pedidos" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))), 0)", "refId": "G", "legendFormat": "Vendedores" },
-        { "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))), 0)", "refId": "H", "legendFormat": "Autenticación" }
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))), 0)",
+          "refId": "A",
+          "legendFormat": "Productos"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))), 0)",
+          "refId": "B",
+          "legendFormat": "Shows"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))), 0)",
+          "refId": "C",
+          "legendFormat": "Perfil"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))), 0)",
+          "refId": "D",
+          "legendFormat": "Direcciones"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))), 0)",
+          "refId": "E",
+          "legendFormat": "Notificaciones"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))), 0)",
+          "refId": "F",
+          "legendFormat": "Pedidos"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))), 0)",
+          "refId": "G",
+          "legendFormat": "Vendedores"
+        },
+        {
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))), 0)",
+          "refId": "H",
+          "legendFormat": "Autenticación"
+        }
       ]
     },
     {
@@ -682,9 +731,18 @@
           "thresholds": {
             "mode": "absolute",
             "steps": [
-              { "color": "green", "value": null },
-              { "color": "yellow", "value": 10 },
-              { "color": "red", "value": 100 }
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
             ]
           }
         },
@@ -695,21 +753,213 @@
         "displayMode": "gradient",
         "sort": "desc",
         "reduceOptions": {
-          "calcs": ["lastNotNull"],
+          "calcs": [
+            "lastNotNull"
+          ],
           "fields": "",
           "values": false
         }
       },
       "targets": [
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[$__range]))", "refId": "A", "legendFormat": "Productos" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[$__range]))", "refId": "B", "legendFormat": "Shows" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[$__range]))", "refId": "C", "legendFormat": "Perfil" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[$__range]))", "refId": "D", "legendFormat": "Direcciones" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[$__range]))", "refId": "E", "legendFormat": "Notificaciones" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[$__range]))", "refId": "F", "legendFormat": "Pedidos" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[$__range]))", "refId": "G", "legendFormat": "Vendedores" },
-        { "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[$__range]))", "refId": "H", "legendFormat": "Autenticación" }
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[$__range]))",
+          "refId": "A",
+          "legendFormat": "Productos"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[$__range]))",
+          "refId": "B",
+          "legendFormat": "Shows"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[$__range]))",
+          "refId": "C",
+          "legendFormat": "Perfil"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[$__range]))",
+          "refId": "D",
+          "legendFormat": "Direcciones"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[$__range]))",
+          "refId": "E",
+          "legendFormat": "Notificaciones"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[$__range]))",
+          "refId": "F",
+          "legendFormat": "Pedidos"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[$__range]))",
+          "refId": "G",
+          "legendFormat": "Vendedores"
+        },
+        {
+          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[$__range]))",
+          "refId": "H",
+          "legendFormat": "Autenticación"
+        }
       ]
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "description": "Total de errores por servicio Lambda, extraido de logs reales. Rojo = problema grave, amarillo = problema menor, verde = sin errores.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 51
+      },
+      "id": 30,
+      "options": {
+        "displayMode": "gradient",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "sort": "desc"
+      },
+      "pluginVersion": "13.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*ApiLambda.*\"} |~ \"ERROR\" | json | label_format short_function={{function}} [$__range]))",
+          "legendFormat": "API Principal",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*Notificat.*\"} |~ \"ERROR\" | json [$__range]))",
+          "legendFormat": "Notificaciones",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*LiveShow.*\"} |~ \"ERROR\" | json [$__range]))",
+          "legendFormat": "Shows en Vivo",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*Invoicing.*\"} |~ \"ERROR\" | json [$__range]))",
+          "legendFormat": "Facturacion",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*EventBid.*\"} |~ \"ERROR\" | json [$__range]))",
+          "legendFormat": "Subastas",
+          "refId": "E"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*AuthStack.*\"} |~ \"ERROR\" | json [$__range]))",
+          "legendFormat": "Autenticacion",
+          "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "sum by(function) (sum_over_time({stage=\"dev\", function=~\".*DatabaseS.*\"} |~ \"ERROR\" | json [$__range]))",
+          "legendFormat": "Base de Datos",
+          "refId": "G"
+        }
+      ],
+      "title": "Errores por servicio (Logs)",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "loki"
+      },
+      "description": "Lineas de error reales de los servicios Lambda en el ambiente dev.",
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 59
+      },
+      "id": 31,
+      "options": {
+        "dedupStrategy": "none",
+        "enableLogDetails": true,
+        "prettifyLogMessage": false,
+        "showCommonLabels": false,
+        "showLabels": false,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "wrapLogMessage": true
+      },
+      "pluginVersion": "13.1.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "loki"
+          },
+          "expr": "{stage=\"dev\"} |~ \"ERROR\" | json | line_format \"{{.record}}\"",
+          "refId": "A"
+        }
+      ],
+      "title": "Detalle de errores (Logs)",
+      "type": "logs"
     }
   ],
   "refresh": "10s",
@@ -865,5 +1115,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 23
+  "version": 24
 }
