@@ -98,7 +98,8 @@
         {
           "expr": "100 * (1 - sum(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}) / sum(k6_http_reqs_total{testid=\"$test_name\"}))",
           "refId": "A",
-          "legendFormat": "disponibilidad"
+          "legendFormat": "disponibilidad",
+          "instant": true
         }
       ]
     },
@@ -161,7 +162,8 @@
         {
           "expr": "sum(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}) / sum(k6_http_reqs_total{testid=\"$test_name\"}) * 100",
           "refId": "A",
-          "legendFormat": "errores"
+          "legendFormat": "errores",
+          "instant": true
         }
       ]
     },
@@ -224,7 +226,8 @@
         {
           "expr": "max(max_over_time(k6_http_req_duration_p99{testid=\"$test_name\"}[$__range]))",
           "refId": "A",
-          "legendFormat": "P99 (peor caso)"
+          "legendFormat": "P99 (peor caso)",
+          "instant": true
         }
       ]
     },
@@ -289,7 +292,8 @@
         {
           "expr": "max(max_over_time(k6_vus_max[$__range]))",
           "refId": "A",
-          "legendFormat": "vus"
+          "legendFormat": "vus",
+          "instant": true
         }
       ]
     },
@@ -1115,5 +1119,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 27
+  "version": 28
 }
