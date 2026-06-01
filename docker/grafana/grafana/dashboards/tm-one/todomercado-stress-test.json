@@ -96,9 +96,10 @@
       },
       "targets": [
         {
-          "expr": "(1 - sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\"}[$__range])) / sum(increase(k6_http_reqs_total{test=\"$test_name\"}[$__range]))) * 100",
+          "expr": "100 - max_over_time(sum by (testid) (rate(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}[$__rate_interval])) / sum by (testid) (rate(k6_http_reqs_total{testid=\"$test_name\"}[$__rate_interval])) * 100[$__range:])",
           "refId": "A",
-          "legendFormat": "disponibilidad"
+          "legendFormat": "disponibilidad",
+          "instant": false
         }
       ]
     },
@@ -159,9 +160,10 @@
       },
       "targets": [
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\"}[$__range])) / sum(increase(k6_http_reqs_total{test=\"$test_name\"}[$__range])) * 100",
+          "expr": "max_over_time(sum by (testid) (rate(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}[$__rate_interval])) / sum by (testid) (rate(k6_http_reqs_total{testid=\"$test_name\"}[$__rate_interval])) * 100[$__range:])",
           "refId": "A",
-          "legendFormat": "errores"
+          "legendFormat": "errores",
+          "instant": false
         }
       ]
     },
@@ -222,7 +224,7 @@
       },
       "targets": [
         {
-          "expr": "max(max_over_time(k6_http_req_duration_p99{test=\"$test_name\"}[$__range]))",
+          "expr": "max(max_over_time(k6_http_req_duration_p99{testid=\"$test_name\"}[$__range]))",
           "refId": "A",
           "legendFormat": "P99 (peor caso)"
         }
@@ -376,7 +378,7 @@
           "legendFormat": "Usuarios activos"
         },
         {
-          "expr": "sum(rate(k6_http_reqs_total{test=\"$test_name\", scenario=~\"$scenario\"}[$__range]))",
+          "expr": "sum(irate(k6_http_reqs_total{testid=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval]))",
           "refId": "B",
           "legendFormat": "Requests/segundo"
         }
@@ -456,12 +458,12 @@
       },
       "targets": [
         {
-          "expr": "avg by(scenario) (k6_http_req_duration_p99{test=\"$test_name\", scenario=~\"$scenario\"})",
+          "expr": "avg by(scenario) (k6_http_req_duration_p99{testid=\"$test_name\", scenario=~\"$scenario\"})",
           "refId": "A",
           "legendFormat": "P99 {{scenario}}"
         },
         {
-          "expr": "max by(scenario) (k6_http_req_duration_p99{test=\"$test_name\", scenario=~\"$scenario\"})",
+          "expr": "max by(scenario) (k6_http_req_duration_p99{testid=\"$test_name\", scenario=~\"$scenario\"})",
           "refId": "B",
           "legendFormat": "P99 max {{scenario}}"
         },
@@ -517,7 +519,7 @@
       },
       "targets": [
         {
-          "expr": "topk(10, max by(endpoint) (k6_http_req_duration_p99{test=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "topk(10, max by(endpoint) (k6_http_req_duration_p99{testid=\"$test_name\", scenario=~\"$scenario\"}))",
           "refId": "A",
           "legendFormat": "{{endpoint}}"
         }
@@ -583,7 +585,7 @@
       },
       "targets": [
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", scenario=~\"$scenario\"}[$__range])) / sum(increase(k6_http_reqs_total{test=\"$test_name\", scenario=~\"$scenario\"}[$__range])) * 100",
+          "expr": "sum(irate(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", scenario=~\"$scenario\"}[$__rate_interval])) / sum(irate(k6_http_reqs_total{testid=\"$test_name\", scenario=~\"$scenario\"}[$__rate_interval])) * 100",
           "refId": "A",
           "legendFormat": "% Errores"
         }
@@ -664,42 +666,42 @@
       },
       "targets": [
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[2m]))), 0)",
           "refId": "A",
           "legendFormat": "Productos"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[2m]))), 0)",
           "refId": "B",
           "legendFormat": "Shows"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[2m]))), 0)",
           "refId": "C",
           "legendFormat": "Perfil"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[2m]))), 0)",
           "refId": "D",
           "legendFormat": "Direcciones"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[2m]))), 0)",
           "refId": "E",
           "legendFormat": "Notificaciones"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[2m]))), 0)",
           "refId": "F",
           "legendFormat": "Pedidos"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[2m]))), 0)",
           "refId": "G",
           "legendFormat": "Vendedores"
         },
         {
-          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))), 0)",
+          "expr": "clamp_min(ceil(sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[2m]))), 0)",
           "refId": "H",
           "legendFormat": "Autenticación"
         }
@@ -762,42 +764,42 @@
       },
       "targets": [
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*listings.*\"}[$__range]))",
           "refId": "A",
           "legendFormat": "Productos"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*shows.*\"}[$__range]))",
           "refId": "B",
           "legendFormat": "Shows"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*users/me[^/]*$\"}[$__range]))",
           "refId": "C",
           "legendFormat": "Perfil"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*addresses.*\"}[$__range]))",
           "refId": "D",
           "legendFormat": "Direcciones"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*notifications.*\"}[$__range]))",
           "refId": "E",
           "legendFormat": "Notificaciones"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*orders.*\"}[$__range]))",
           "refId": "F",
           "legendFormat": "Pedidos"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*sellers.*\"}[$__range]))",
           "refId": "G",
           "legendFormat": "Vendedores"
         },
         {
-          "expr": "sum(increase(k6_http_reqs_total{test=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[$__range]))",
+          "expr": "sum(increase(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\", name=~\".*cognito.*\"}[$__range]))",
           "refId": "H",
           "legendFormat": "Autenticación"
         }
@@ -1115,5 +1117,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 24
+  "version": 25
 }
