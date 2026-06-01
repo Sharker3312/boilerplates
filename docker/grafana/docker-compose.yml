@@ -9,6 +9,7 @@ services:
       - --storage.tsdb.retention.time=30d
       - --web.enable-lifecycle
       - --web.enable-remote-write-receiver
+      - --query.lookback-delta=168h
     ports:
       - "9090:9090"
     volumes:
