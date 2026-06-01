@@ -96,7 +96,7 @@
       },
       "targets": [
         {
-          "expr": "100 * (1 - sum(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}) / sum(k6_http_reqs_total{testid=\"$test_name\"}))",
+          "expr": "100 * (1 - (sum(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}) or vector(0)) / sum(k6_http_reqs_total{testid=\"$test_name\"}))",
           "refId": "A",
           "legendFormat": "disponibilidad",
           "instant": true
@@ -160,7 +160,7 @@
       },
       "targets": [
         {
-          "expr": "sum(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}) / sum(k6_http_reqs_total{testid=\"$test_name\"}) * 100",
+          "expr": "(sum(k6_http_reqs_total{testid=\"$test_name\", expected_response=\"false\"}) or vector(0)) / sum(k6_http_reqs_total{testid=\"$test_name\"}) * 100",
           "refId": "A",
           "legendFormat": "errores",
           "instant": true
@@ -184,9 +184,9 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "s",
+          "unit": "ms",
           "min": 0,
-          "max": 10,
+          "max": 10000,
           "color": {
             "mode": "thresholds"
           },
@@ -224,7 +224,7 @@
       },
       "targets": [
         {
-          "expr": "max(max_over_time(k6_http_req_duration_p99{testid=\"$test_name\"}[$__range]))",
+          "expr": "max_over_time(histogram_quantile(0.99, sum by(le) (rate(k6_http_req_duration_milliseconds_bucket{testid=\"$test_name\"}[5m])))[2h:])",
           "refId": "A",
           "legendFormat": "P99 (peor caso)",
           "instant": true
@@ -403,7 +403,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "s",
+          "unit": "ms",
           "custom": {
             "drawStyle": "line",
             "lineInterpolation": "smooth",
@@ -460,14 +460,9 @@
       },
       "targets": [
         {
-          "expr": "avg by(scenario) (k6_http_req_duration_p99{testid=\"$test_name\", scenario=~\"$scenario\"})",
+          "expr": "histogram_quantile(0.99, sum by(le, scenario) (rate(k6_http_req_duration_milliseconds_bucket{testid=\"$test_name\", scenario=~\"$scenario\"}[5m])))",
           "refId": "A",
           "legendFormat": "P99 {{scenario}}"
-        },
-        {
-          "expr": "max by(scenario) (k6_http_req_duration_p99{testid=\"$test_name\", scenario=~\"$scenario\"})",
-          "refId": "B",
-          "legendFormat": "P99 max {{scenario}}"
         },
         {
           "expr": "k6_vus",
@@ -493,7 +488,7 @@
       },
       "fieldConfig": {
         "defaults": {
-          "unit": "s",
+          "unit": "ms",
           "custom": {
             "drawStyle": "line",
             "lineInterpolation": "smooth",
@@ -521,7 +516,7 @@
       },
       "targets": [
         {
-          "expr": "topk(10, max by(endpoint) (k6_http_req_duration_p99{testid=\"$test_name\", scenario=~\"$scenario\"}))",
+          "expr": "topk(10, histogram_quantile(0.99, sum by(le, endpoint) (rate(k6_http_req_duration_milliseconds_bucket{testid=\"$test_name\", scenario=~\"$scenario\"}[5m]))))",
           "refId": "A",
           "legendFormat": "{{endpoint}}"
         }
@@ -1119,5 +1114,5 @@
   "timezone": "America/Santo_Domingo",
   "title": "TodoMercado - Pruebas de Rendimiento",
   "uid": "tm-stress-test",
-  "version": 28
+  "version": 29
 }
