@@ -146,7 +146,7 @@ endpoints:
   - type: telegram
 - name: Viventi Bot - Develop
   group: Bot
-  url: https://w.viventi_multibot-bot-develop.deepzide.com/health
+  url: https://w.viventi-multibot-bot-develop.deepzide.com/health
   interval: 1m
   conditions:
   - '[STATUS] == 200'
