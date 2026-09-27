@@ -45,6 +45,22 @@ endpoints:
   - '[STATUS] == 200'
   alerts:
   - type: telegram
+- name: SMTP2GO - Upstream
+  group: Email
+  url: tcp://mail.smtp2go.com:2525
+  interval: 1m
+  conditions:
+  - '[CONNECTED] == true'
+  alerts:
+  - type: telegram
+- name: Acuamania - Dev
+  group: WordPress
+  url: https://dev.acuamania.uy/
+  interval: 1m
+  conditions:
+  - '[STATUS] == 200'
+  alerts:
+  - type: telegram
 - name: Dermagroup - Prod
   group: ERP
   url: https://erp-dermagroup.deepzide.com
