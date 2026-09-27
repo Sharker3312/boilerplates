@@ -1,0 +1,4 @@
+# Never commit environment files with real secrets (this repo is public).
+.env
+*.env
+!.env.example
